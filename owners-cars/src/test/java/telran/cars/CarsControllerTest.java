@@ -21,27 +21,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import telran.cars.dto.CarDto;
 import telran.cars.dto.PersonDto;
 import telran.cars.dto.TradeDealDto;
+import telran.cars.exceptions.IllegalStateExceptions;
 import telran.cars.exceptions.NotFoundException;
 import telran.cars.service.CarsService;
-@WebMvcTest //inserting into Application Context Mock WEB server instead of real WebServer
+
+@WebMvcTest // inserting into Application Context Mock WEB server instead of real WebServer
 class CarsControllerTest {
 	private static final long PERSON_ID = 123l;
 	private static final String CAR_NUMBER = "123-01-002";
 	private static final String PERSON_NOT_FOUND_MESSAGE = "person not found message";
 	private static final String CAR_NOT_FOUND_MESSAGE = "car not found message";
-	@MockBean //inserting into Application Context Mock instead of real Service implementation
+	private static final String PERSON_ALREADY_EXISTS_MESSAGE = "person already exists";
+	private static final String CAR_ALREADY_EXISTS_MESSAGE = "car already exists";
+	@MockBean // inserting into Application Context Mock instead of real Service
+				// implementation
 	CarsService carsService;
-	@Autowired //for injection of MockMvc from Application Context
+	@Autowired // for injection of MockMvc from Application Context
 	MockMvc mockMvc;
 	CarDto carDto = new CarDto(CAR_NUMBER, "model");
 	CarDto carDto1 = new CarDto("car123", "mode123");
-	
-	@Autowired //for injection of ObjectMapper from Application context
-	ObjectMapper mapper; //object for getting JSON from object and object from JSON
+
+	@Autowired // for injection of ObjectMapper from Application context
+	ObjectMapper mapper; // object for getting JSON from object and object from JSON
 	private PersonDto personDto = new PersonDto(PERSON_ID, "Vasya", "2000-10-10", "vasya@gmail.com");
 	PersonDto personDtoUpdated = new PersonDto(PERSON_ID, "Vasya", "2000-10-10", "vasya@tel-ran.com");
 	PersonDto personWrongEmail = new PersonDto(PERSON_ID, "Vasya", "2000-10-10", "kuku");
-	
+
 	TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER, PERSON_ID);
 
 	@Test
@@ -105,9 +110,7 @@ class CarsControllerTest {
 
 	@Test
 	void testGetOwnerCars() throws Exception {
-		CarDto [] expectedArray = {
-				carDto, carDto1
-		};
+		CarDto[] expectedArray = { carDto, carDto1 };
 		String jsonExpected = mapper.writeValueAsString(expectedArray);
 		when(carsService.getOwnerCars(PERSON_ID)).thenReturn(Arrays.asList(expectedArray));
 		String actualJSON = mockMvc.perform(get("http://localhost:8080/cars/person/" + PERSON_ID))
@@ -123,6 +126,7 @@ class CarsControllerTest {
 				.andReturn().getResponse().getContentAsString();
 		assertEquals(jsonExpected, actualJSON);
 	}
+
 	@Test
 	void testDeletePersonNotFound() throws Exception  {
 		when(carsService.deletePerson(PERSON_ID)).thenThrow(new NotFoundException(PERSON_NOT_FOUND_MESSAGE));
@@ -132,6 +136,7 @@ class CarsControllerTest {
 		assertEquals(PERSON_NOT_FOUND_MESSAGE, actualJSON);
 		
 	}
+
 	@Test
 	void testDeleteCarNotFound() throws Exception  {
 		when(carsService.deleteCar(carDto.number())).thenThrow(new NotFoundException(CAR_NOT_FOUND_MESSAGE));
@@ -139,6 +144,26 @@ class CarsControllerTest {
 		String actualJSON = mockMvc.perform(delete("http://localhost:8080/cars/" + carDto.number()))
 				.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString();
 		assertEquals(CAR_NOT_FOUND_MESSAGE, actualJSON);
+		
+	}
+	@Test
+	void testAddCarExists() throws Exception  {
+		when(carsService.addCar(carDto)).thenThrow(new IllegalStateExceptions(CAR_ALREADY_EXISTS_MESSAGE));
+		String jsonCarDto = mapper.writeValueAsString(carDto);
+		String actualJSON = mockMvc.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonCarDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(CAR_ALREADY_EXISTS_MESSAGE, actualJSON);
+		
+	}
+	@Test
+	void testAddPersonExists() throws Exception  {
+		when(carsService.addPerson(personDto)).thenThrow(new IllegalStateExceptions(PERSON_ALREADY_EXISTS_MESSAGE));
+		String jsonPersonDto = mapper.writeValueAsString(personDto);
+		String actualJSON = mockMvc.perform(post("http://localhost:8080/cars/person").contentType(MediaType.APPLICATION_JSON)
+				.content(jsonPersonDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(PERSON_ALREADY_EXISTS_MESSAGE, actualJSON);
 		
 	}
 }
