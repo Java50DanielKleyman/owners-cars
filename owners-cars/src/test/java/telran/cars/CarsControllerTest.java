@@ -34,6 +34,7 @@ class CarsControllerTest {
 	static final String WRONG_EMAIL_ADDRESS = "kuku";
 	static final String EMAIL_ADDRESS = "vasya@gmail.com";
 	private static final Long WRONG_PERSON_ID = 123l;
+	private static final String WRONG_CAR_NUMBER = "car123";
 	@MockBean // inserting into Application Context Mock instead of real Service
 				// implementation
 	CarsService carsService;
@@ -319,4 +320,24 @@ class CarsControllerTest {
 		assertEquals(WRONG_MIN_PERSON_ID_VALUE, actualJSON);
 	}
 
+	@Test
+	void deleteCarWrongCarNumberTest() throws Exception {
+		String response = mockMvc.perform(delete("http://localhost:8080/cars/" + WRONG_CAR_NUMBER))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_CAR_NUMBER_MESSAGE, response);
+	}
+
+	@Test
+	void getOwnerCarsWrongIdTest() throws Exception {
+		String actualJSON = mockMvc.perform(get("http://localhost:8080/cars/person/" + WRONG_PERSON_ID))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_MIN_PERSON_ID_VALUE, actualJSON);
+	}
+
+	@Test
+	void getCarOwnerWrongCarNumberTest() throws Exception {
+		String actualJSON = mockMvc.perform(get("http://localhost:8080/cars/" + WRONG_CAR_NUMBER))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_CAR_NUMBER_MESSAGE, actualJSON);
+	}
 }
