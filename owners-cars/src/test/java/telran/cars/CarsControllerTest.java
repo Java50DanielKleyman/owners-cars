@@ -41,6 +41,8 @@ class CarsControllerTest {
 	MockMvc mockMvc;
 	CarDto carDto = new CarDto(CAR_NUMBER, "model");
 	CarDto carDto1 = new CarDto("car123", "mode123");
+	CarDto carDto2 = new CarDto("123-01-002", null);
+	CarDto carDto3 = new CarDto("car123", null);
 
 	@Autowired // for injection of ObjectMapper from Application context
 	ObjectMapper mapper; // object for getting JSON from object and object from JSON
@@ -51,6 +53,8 @@ class CarsControllerTest {
 	PersonDto personWrongId = new PersonDto(123l, "Vasya", "2000-10-10", EMAIL_ADDRESS);
 
 	TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER, PERSON_ID);
+	TradeDealDto tradeDeal1 = new TradeDealDto("123", PERSON_ID);
+	TradeDealDto tradeDeal2 = new TradeDealDto(CAR_NUMBER, 22222222222l);
 
 	@Test
 	void testAddCar() throws Exception {
@@ -241,6 +245,16 @@ class CarsControllerTest {
 	}
 
 	@Test
+	void uoDatePersonWrongIdTest() throws Exception {
+		String jsonPersonDto = mapper.writeValueAsString(personWrongId);
+		String response = mockMvc
+				.perform(post("http://localhost:8080/cars/person").contentType(MediaType.APPLICATION_JSON)
+						.content(jsonPersonDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_MIN_PERSON_ID_VALUE, response);
+	}
+
+	@Test
 	void addPersonNoIdTest() throws Exception {
 		String jsonPersonDto = mapper.writeValueAsString(personNoId);
 		String response = mockMvc
@@ -257,6 +271,45 @@ class CarsControllerTest {
 				.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON).content(jsonCarDto))
 				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
 		assertEquals(WRONG_CAR_NUMBER_MESSAGE, response);
+	}
+
+	@Test
+	void addCarNoModelTest() throws Exception {
+		String jsonCarDto = mapper.writeValueAsString(carDto2);
+		String response = mockMvc
+				.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON).content(jsonCarDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(MISSING_CAR_MODEL_MESSAGE, response);
+	}
+
+	// @Test
+	void addCarWrongNumberNoModelTest() throws Exception {
+		String jsonCarDto = mapper.writeValueAsString(carDto3);
+		String response = mockMvc
+				.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON).content(jsonCarDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		String errorMessage = "Incorrect Car Number;Missing car model";
+		assertEquals(errorMessage, response);
+	}
+
+	@Test
+	void testPurchaseWrongCarNumber() throws Exception {
+		String jsonTradeDeal = mapper.writeValueAsString(tradeDeal1);
+		String response = mockMvc
+				.perform(put("http://localhost:8080/cars/trade").contentType(MediaType.APPLICATION_JSON)
+						.content(jsonTradeDeal))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_CAR_NUMBER_MESSAGE, response);
+	}
+
+	@Test
+	void testPurchaseWrongIdNumber() throws Exception {
+		String jsonTradeDeal = mapper.writeValueAsString(tradeDeal2);
+		String response = mockMvc
+				.perform(put("http://localhost:8080/cars/trade").contentType(MediaType.APPLICATION_JSON)
+						.content(jsonTradeDeal))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(WRONG_MAX_PERSON_ID_VALUE, response);
 	}
 
 	@Test
