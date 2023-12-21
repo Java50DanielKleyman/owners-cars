@@ -44,6 +44,7 @@ class CarsControllerTest {
 	CarDto carDto1 = new CarDto("car123", "mode123");
 	CarDto carDto2 = new CarDto("123-01-002", null);
 	CarDto carDto3 = new CarDto("car123", null);
+	CarDto carDto4 = new CarDto(null, "mode123");
 
 	@Autowired // for injection of ObjectMapper from Application context
 	ObjectMapper mapper; // object for getting JSON from object and object from JSON
@@ -52,6 +53,7 @@ class CarsControllerTest {
 	PersonDto personWrongEmail = new PersonDto(PERSON_ID, "Vasya", "2000-10-10", WRONG_EMAIL_ADDRESS);
 	PersonDto personNoId = new PersonDto(null, "Vasya", "2000-10-10", EMAIL_ADDRESS);
 	PersonDto personWrongId = new PersonDto(123l, "Vasya", "2000-10-10", EMAIL_ADDRESS);
+	
 
 	TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER, PERSON_ID);
 	TradeDealDto tradeDeal1 = new TradeDealDto("123", PERSON_ID);
@@ -282,7 +284,14 @@ class CarsControllerTest {
 				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
 		assertEquals(MISSING_CAR_MODEL_MESSAGE, response);
 	}
-
+	@Test
+	void addCarNoNumberTest() throws Exception {
+		String jsonCarDto = mapper.writeValueAsString(carDto4);
+		String response = mockMvc
+				.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON).content(jsonCarDto))
+				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		assertEquals(MISSING_CAR_NUMBER_MESSAGE, response);
+	}
 	// @Test
 	void addCarWrongNumberNoModelTest() throws Exception {
 		String jsonCarDto = mapper.writeValueAsString(carDto3);
