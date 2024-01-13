@@ -1,13 +1,33 @@
 package telran.cars.api;
 
+import java.util.Calendar;
+
 public interface ValidationConstants {
 	String MISSING_CAR_NUMBER_MESSAGE = "Missing car number";
 	String CAR_NUMBER_REGEXP = "(\\d{3}-\\d{2}-\\d{3})|(\\d{2}-\\d{3}-\\d{2})";
 	String WRONG_CAR_NUMBER_MESSAGE = "Incorrect Car Number";
 	String MISSING_CAR_MODEL_MESSAGE = "Missing car model";
 	String MISSING_PERSON_ID_MESSAGE = "Missing person ID";
+	String MISSING_MODEL_MESSAGE = "Missing model";
+	String MISSING_YEAR_MESSAGE = "Missing year";
+	String MISSING_COMPANY_MESSAGE = "Missing company";
+	String MISSING_ENGINE_POWER_MESSAGE = "Missing engine power";
+	String MISSING_ENGINE_CAPACITY_MESSAGE = "Missing engine capacity";
 	long MIN_PERSON_ID_VALUE = 100000l;
 	long MAX_PERSON_ID_VALUE = 999999l;
+	long max_year = Calendar.getInstance().get(Calendar.YEAR);
+	long MAX_YEAR = 2024;
+	long MIN_YEAR = 1900;
+	long MIN_ENGINE_POWER = 50;
+	long MAX_ENGINE_POWER = 5500;
+	long MIN_ENGINE_CAPACITY = 500;
+	long MAX_ENGINE_CAPACITY = 10000;
+	String WRONG_MIN_ENGINE_CAPACITY_MESSAGE = "Engine capacity must not be less then " + MIN_ENGINE_CAPACITY;
+	String WRONG_MAX_ENGINE_CAPACITY_MESSAGE = "Engine capacity must not be greater then " + MAX_ENGINE_CAPACITY;
+	String WRONG_MIN_ENGINE_POWER_MESSAGE = "Engine power must not be less then " + MIN_ENGINE_POWER;
+	String WRONG_MAX_ENGINE_POWER_MESSAGE = "Engine power must not be greater then " + MAX_ENGINE_POWER;
+	String WRONG_MIN_YEAR_MESSAGE = "Year must not be less then " + MIN_YEAR;
+	String WRONG_MAX_YEAR_MESSAGE = "Year must not be greater then " + MAX_YEAR;
 	String WRONG_MIN_PERSON_ID_VALUE = "Person ID must be greater or equal " + MIN_PERSON_ID_VALUE;
 	String WRONG_MAX_PERSON_ID_VALUE = "Person ID must be less or equal " + MAX_PERSON_ID_VALUE;
 	String MISSING_PERSON_NAME_MESSAGE = "Missing person name";
