@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import telran.cars.dto.ModelDto;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "models")
 @Getter
@@ -17,15 +18,13 @@ public class Model {
 	@Column(name = "engine_capacity", nullable = false)
 	int engineCapacity;
 
-	public Model() {
-		
-	}
-	public Model(ModelDto modelDto) {
-		this.modelYear = new ModelYear(modelDto.model(), modelDto.year());
-		this.company = modelDto.company();
-		this.enginePower = modelDto.enginePower();
-		this.engineCapacity = modelDto.engineCapacity();
-
+	public static Model of(ModelDto modelDto) {
+		Model model = new Model();
+		model.modelYear = new ModelYear(modelDto.model(), modelDto.year());
+		model.company = modelDto.company();
+		model.enginePower = modelDto.enginePower();
+		model.engineCapacity = modelDto.engineCapacity();
+		return model;
 	}
 
 	public ModelDto build(Model model) {

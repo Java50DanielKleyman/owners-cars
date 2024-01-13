@@ -1,10 +1,12 @@
 package telran.cars.service.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import telran.cars.dto.CarDto;
 import telran.cars.dto.CarState;
 import jakarta.persistence.*;
 
+@NoArgsConstructor
 @Entity
 @Getter
 @Table(name = "cars")
@@ -23,22 +25,20 @@ public class Car {
 	@Enumerated(EnumType.STRING) // value in the table will be a string (by default a number)
 	CarState state;
 
-	public Car() {
-		
-	}
-	public Car(CarDto carDto) {
-		this.number = carDto.number();
-		this.model.modelYear = new ModelYear(carDto.model(), carDto.year());
-		this.carOwner = new CarOwner(); 
-		this.carOwner.id = carDto.id();
-		this.color = carDto.color();
-		this.kilometers = carDto.kilometers();
-		this.state = carDto.carState();
-	}
+	public static Car of(CarDto carDto) {
+        Car car = new Car();
+        car.number = carDto.number();
+        car.model = new Model();
+        car.model.modelYear = new ModelYear(carDto.model(), carDto.year());
+        car.carOwner.id = carDto.id();
+        car.color = carDto.color();
+        car.kilometers = carDto.kilometers();
+        car.state = carDto.carState();
+        return car;
+    }
 
-	public static CarDto build(Car car) {
+	public CarDto build (Car car) {
 		return new CarDto(car.number, car.model.modelYear.getName(), car.model.modelYear.getYear(), car.carOwner.id,
-				car.color, car.kilometers, car
-				.state);
+				car.color, car.kilometers, car.state);
 	}
 }
