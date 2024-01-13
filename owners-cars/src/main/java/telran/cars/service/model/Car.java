@@ -23,9 +23,13 @@ public class Car {
 	@Enumerated(EnumType.STRING) // value in the table will be a string (by default a number)
 	CarState state;
 
+	public Car() {
+		
+	}
 	public Car(CarDto carDto) {
 		this.number = carDto.number();
 		this.model.modelYear = new ModelYear(carDto.model(), carDto.year());
+		this.carOwner = new CarOwner(); 
 		this.carOwner.id = carDto.id();
 		this.color = carDto.color();
 		this.kilometers = carDto.kilometers();

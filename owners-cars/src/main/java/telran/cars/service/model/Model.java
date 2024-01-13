@@ -17,6 +17,9 @@ public class Model {
 	@Column(name = "engine_capacity", nullable = false)
 	int engineCapacity;
 
+	public Model() {
+		
+	}
 	public Model(ModelDto modelDto) {
 		this.modelYear = new ModelYear(modelDto.model(), modelDto.year());
 		this.company = modelDto.company();
