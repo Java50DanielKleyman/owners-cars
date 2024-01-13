@@ -13,6 +13,11 @@ public interface ValidationConstants {
 	String MISSING_COMPANY_MESSAGE = "Missing company";
 	String MISSING_ENGINE_POWER_MESSAGE = "Missing engine power";
 	String MISSING_ENGINE_CAPACITY_MESSAGE = "Missing engine capacity";
+	String MISSING_COLOR_MESSAGE = "Missing color";
+	String MISSING_KILOMETERS_MESSAGE = "Missing kilometers";
+	String MISSING_CAR_STATE_MESSAGE = "Missing car state";
+	long MAX_KILOMETERS = 0;
+	long MIN_KILOMETERS = 1500000;
 	long MIN_PERSON_ID_VALUE = 100000l;
 	long MAX_PERSON_ID_VALUE = 999999l;
 	long max_year = Calendar.getInstance().get(Calendar.YEAR);
@@ -22,6 +27,9 @@ public interface ValidationConstants {
 	long MAX_ENGINE_POWER = 5500;
 	long MIN_ENGINE_CAPACITY = 500;
 	long MAX_ENGINE_CAPACITY = 10000;
+	String INVALID_CAR_STATE_MESSAGE = "car state must be one of: OLD, NEW, GOOD, MIDDLE, BAD";
+	String WRONG_MIN_KILOMETERS_MESSAGE = "Kilometers must not be less then " + MIN_KILOMETERS;
+	String WRONG_MAX_KILOMETERS_MESSAGE = "Kilometers must not be greater then " + MAX_KILOMETERS;
 	String WRONG_MIN_ENGINE_CAPACITY_MESSAGE = "Engine capacity must not be less then " + MIN_ENGINE_CAPACITY;
 	String WRONG_MAX_ENGINE_CAPACITY_MESSAGE = "Engine capacity must not be greater then " + MAX_ENGINE_CAPACITY;
 	String WRONG_MIN_ENGINE_POWER_MESSAGE = "Engine power must not be less then " + MIN_ENGINE_POWER;
