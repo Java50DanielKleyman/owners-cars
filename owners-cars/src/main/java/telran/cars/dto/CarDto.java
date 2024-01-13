@@ -17,6 +17,25 @@ public record CarDto(
 {
 	public CarDto {
 		validateCarState(carState);
+		validateColor(color);
+	}
+
+	private void validateColor(String color) {
+		if (!isValidColor(color)) {
+			throw new IllegalArgumentException(INVALID_COLOR_MESSAGE);
+		}
+
+	}
+
+	private boolean isValidColor(String color) {
+		Colors[] allowedColors = { Colors.RED, Colors.SILVER, Colors.WHITE };
+
+		for (Colors allowedColor : allowedColors) {
+			if (allowedColor.name().equals(color)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void validateCarState(CarState carState) {
@@ -30,7 +49,7 @@ public record CarDto(
 		CarState[] allowedStates = { CarState.OLD, CarState.NEW, CarState.GOOD, CarState.MIDDLE, CarState.BAD };
 
 		for (CarState allowedState : allowedStates) {
-			if (allowedState == carState) {
+			if (allowedState.equals(carState)) {
 				return true;
 			}
 		}

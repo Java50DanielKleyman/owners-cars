@@ -27,6 +27,7 @@ public interface ValidationConstants {
 	long MAX_ENGINE_POWER = 5500;
 	long MIN_ENGINE_CAPACITY = 500;
 	long MAX_ENGINE_CAPACITY = 10000;
+	String INVALID_COLOR_MESSAGE = "car state must be one of: RED, SILVER, WHITE";
 	String INVALID_CAR_STATE_MESSAGE = "car state must be one of: OLD, NEW, GOOD, MIDDLE, BAD";
 	String WRONG_MIN_KILOMETERS_MESSAGE = "Kilometers must not be less then " + MIN_KILOMETERS;
 	String WRONG_MAX_KILOMETERS_MESSAGE = "Kilometers must not be greater then " + MAX_KILOMETERS;
@@ -40,7 +41,8 @@ public interface ValidationConstants {
 	String WRONG_MAX_PERSON_ID_VALUE = "Person ID must be less or equal " + MAX_PERSON_ID_VALUE;
 	String MISSING_PERSON_NAME_MESSAGE = "Missing person name";
 	String MISSING_BIRTH_DATE_MESSAGE = "Missing person's birth date";
-	String BIRTH_DATE_REGEXP = "\\d{4}-\\d{2}-\\d{2}";
+	String MISSING_DEAL_DATE_MESSAGE = "Missing deal's date";
+	String DATE_REGEXP = "\\d{4}-\\d{2}-\\d{2}";	
 	String WRONG_DATE_FORMAT = "Wrong date format, must be YYYY-MM-dd";
 	String MISSING_PERSON_EMAIL = "Missing email address";
 	String WRONG_EMAIL_FORMAT = "Wrong email format";
