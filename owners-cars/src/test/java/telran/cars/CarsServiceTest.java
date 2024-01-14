@@ -27,7 +27,10 @@ class CarsServiceTest {
 	private static final  String CAR_NUMBER_3 = "333-33-333";
 	private static final  String CAR_NUMBER_4 = "444-44-444";
 	private static final  String CAR_NUMBER_5 = "555-55-555";
+	private static final CarState carState1 = CarState.MIDDLE;
+	private static final CarState carState2 = CarState.GOOD;
 	private static final Long PERSON_ID_1 = 123l;
+	private static final Long PERSON_ID_3 = 125l;	
 	private static final String NAME1 = "name1";
 	private static final String BIRTH_DATE_1 = "2000-10-10";
 	private static final String EMAIL1 = "name1@gmail.com";
@@ -36,13 +39,12 @@ class CarsServiceTest {
 	private static final String BIRTH_DATE_2 = "2000-10-10";
 	private static final String EMAIL2 = "name2@gmail.com";
 	private static final Long PERSON_ID_NOT_EXISTS = 1111111111L;
-	
 	private static final  String NEW_EMAIL = "name1@tel-ran.co.il";
-	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1);
-	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1);
-	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2);
-	CarDto car4 = new CarDto(CAR_NUMBER_4, MODEL2);
-	CarDto car5 = new CarDto(CAR_NUMBER_5, MODEL3);
+	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1, 2021, PERSON_ID_1, "WHITE", 150, CarState.MIDDLE );
+	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1, 2020, PERSON_ID_2, "RED", 1500, CarState.GOOD);
+	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2018, PERSON_ID_3, "SILVER", 2500, CarState.NEW);
+	CarDto car4 = new CarDto(CAR_NUMBER_4, MODEL2, 2010, PERSON_ID_2, "RED", 3500, CarState.GOOD);
+	CarDto car5 = new CarDto(CAR_NUMBER_5, MODEL3, 2000, PERSON_ID_1, "RED", 45000, CarState.BAD);
 	PersonDto personDto = new PersonDto(PERSON_ID_NOT_EXISTS, NAME1, BIRTH_DATE_1, EMAIL1);
 	PersonDto personDto1 = new PersonDto(PERSON_ID_1, NAME1, BIRTH_DATE_1, EMAIL1);
 	PersonDto personDto2 = new PersonDto(PERSON_ID_2, NAME2, BIRTH_DATE_2, EMAIL2);

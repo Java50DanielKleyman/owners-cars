@@ -6,13 +6,20 @@ import static telran.cars.api.ValidationConstants.*;
 import java.util.Objects;
 
 public record CarDto(
-		@NotEmpty(message = MISSING_CAR_NUMBER_MESSAGE) @Pattern(regexp = CAR_NUMBER_REGEXP, message = WRONG_CAR_NUMBER_MESSAGE) String number,
-		@NotEmpty(message = MISSING_CAR_MODEL_MESSAGE) String model,
-		@NotNull(message = MISSING_YEAR_MESSAGE) @Min(value = MIN_YEAR, message = WRONG_MIN_YEAR_MESSAGE) @Max(value = MAX_YEAR, message = WRONG_MAX_YEAR_MESSAGE) int year,
-		@NotNull(message = MISSING_PERSON_ID_MESSAGE) @Min(value = MIN_PERSON_ID_VALUE, message = WRONG_MIN_PERSON_ID_VALUE) @Max(value = MAX_PERSON_ID_VALUE, message = WRONG_MAX_PERSON_ID_VALUE) Long id,
-		@NotEmpty(message = MISSING_COLOR_MESSAGE) String color,
-		@NotNull(message = MISSING_KILOMETERS_MESSAGE) @Min(value = MIN_KILOMETERS, message = WRONG_MIN_KILOMETERS_MESSAGE) @Max(value = MAX_KILOMETERS, message = WRONG_MAX_KILOMETERS_MESSAGE) int kilometers,
-		@NotNull(message = MISSING_CAR_STATE_MESSAGE) CarState carState)
+		@NotEmpty(message = MISSING_CAR_NUMBER_MESSAGE) @Pattern(regexp = CAR_NUMBER_REGEXP, message = WRONG_CAR_NUMBER_MESSAGE) 
+		String number,
+		@NotEmpty(message = MISSING_CAR_MODEL_MESSAGE) 
+		String model,
+		@NotNull(message = MISSING_YEAR_MESSAGE) @Min(value = MIN_YEAR, message = WRONG_MIN_YEAR_MESSAGE) @Max(value = MAX_YEAR, message = WRONG_MAX_YEAR_MESSAGE) 
+		int year,
+		@NotNull(message = MISSING_PERSON_ID_MESSAGE) @Min(value = MIN_PERSON_ID_VALUE, message = WRONG_MIN_PERSON_ID_VALUE) @Max(value = MAX_PERSON_ID_VALUE, message = WRONG_MAX_PERSON_ID_VALUE) 
+		Long id,
+		@NotEmpty(message = MISSING_COLOR_MESSAGE) 
+		String color,
+		@NotNull(message = MISSING_KILOMETERS_MESSAGE) @Min(value = MIN_KILOMETERS, message = WRONG_MIN_KILOMETERS_MESSAGE) @Max(value = MAX_KILOMETERS, message = WRONG_MAX_KILOMETERS_MESSAGE) 
+		int kilometers,
+		@NotNull(message = MISSING_CAR_STATE_MESSAGE) 
+		CarState carState)
 
 {
 	public CarDto {
@@ -21,7 +28,7 @@ public record CarDto(
 	}
 
 	private void validateColor(String color) {
-		if (!isValidColor(color)) {
+			if (!isValidColor(color)) {
 			throw new IllegalArgumentException(INVALID_COLOR_MESSAGE);
 		}
 
@@ -39,9 +46,10 @@ public record CarDto(
 	}
 
 	private void validateCarState(CarState carState) {
+		if(carState != null) {
 		if (!isValidCarState(carState)) {
 			throw new IllegalArgumentException(INVALID_CAR_STATE_MESSAGE);
-		}
+		}}
 	}
 
 	private boolean isValidCarState(CarState carState) {
