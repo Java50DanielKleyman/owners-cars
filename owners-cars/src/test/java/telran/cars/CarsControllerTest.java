@@ -53,7 +53,7 @@ class CarsControllerTest {
 	MockMvc mockMvc;
 	CarDto carDto = new CarDto(CAR_NUMBER, "model", 1970, PERSON_ID, "RED", 100, carState1);
 	CarDto carDto1 = new CarDto("car123", "mode123", 1975, PERSON_ID1, "WHITE", 100, carState2);
-//	CarDto carDtoMissingFields = new CarDto(null, null,  0,  null,  null,  0, CarState.BAD);
+	CarDto carDtoMissingFields = new CarDto(null, null,  0,  null,  null,  0, null);
 
 	@Autowired // for injection of ObjectMapper from Application context
 	ObjectMapper mapper; // object for getting JSON from object and object from JSON
@@ -275,7 +275,6 @@ class CarsControllerTest {
 
 	@Test
 	void addCarMissingFields() throws Exception {
-		CarDto carDtoMissingFields = new CarDto(null, null, 0, null, null, 0, null);
 		String jsonCarDto = mapper.writeValueAsString(carDtoMissingFields); // conversion from carDto object to string
 																			// JSON
 		String response = mockMvc

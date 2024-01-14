@@ -23,7 +23,7 @@ public record CarDto(
 
 {
 	public CarDto {
-//		validateCarState(carState);
+		validateCarState(carState);
 //		validateColor(color);
 	}
 
