@@ -23,8 +23,8 @@ public record CarDto(
 
 {
 	public CarDto {
-		validateCarState(carState);
-		validateColor(color);
+//		validateCarState(carState);
+//		validateColor(color);
 	}
 
 	private void validateColor(String color) {

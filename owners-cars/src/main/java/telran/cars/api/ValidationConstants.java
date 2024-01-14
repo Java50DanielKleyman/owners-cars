@@ -27,7 +27,7 @@ public interface ValidationConstants {
 	long MAX_ENGINE_POWER = 5500;
 	long MIN_ENGINE_CAPACITY = 500;
 	long MAX_ENGINE_CAPACITY = 10000;
-	String INVALID_COLOR_MESSAGE = "car state must be one of: RED, SILVER, WHITE";
+	String INVALID_COLOR_MESSAGE = "car color must be one of: RED, SILVER, WHITE";
 	String INVALID_CAR_STATE_MESSAGE = "car state must be one of: OLD, NEW, GOOD, MIDDLE, BAD";
 	String WRONG_MIN_KILOMETERS_MESSAGE = "Kilometers must not be less then " + MIN_KILOMETERS;
 	String WRONG_MAX_KILOMETERS_MESSAGE = "Kilometers must not be greater then " + MAX_KILOMETERS;

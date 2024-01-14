@@ -69,8 +69,8 @@ class CarsControllerTest {
 	TradeDealDto tradeDealWrongCarNumber = new TradeDealDto(WRONG_CAR_NUMBER, PERSON_ID, "2000-10-10");
 	TradeDealDto tradeDealWrongId = new TradeDealDto(CAR_NUMBER, -10l, "2000-10-10");
 	TradeDealDto tradeDealAllFieldsMissing = new TradeDealDto(null, null, null);
-	private String[] expectedCarMissingFieldsMessages = { MISSING_CAR_NUMBER_MESSAGE, MISSING_CAR_MODEL_MESSAGE, MISSING_YEAR_MESSAGE,
-			MISSING_PERSON_ID_MESSAGE, MISSING_COLOR_MESSAGE, MISSING_KILOMETERS_MESSAGE, MISSING_CAR_STATE_MESSAGE};
+	private String[] expectedCarMissingFieldsMessages = { MISSING_CAR_NUMBER_MESSAGE, MISSING_CAR_MODEL_MESSAGE, WRONG_MIN_YEAR_MESSAGE,
+			MISSING_PERSON_ID_MESSAGE, MISSING_COLOR_MESSAGE, MISSING_CAR_STATE_MESSAGE};
 	private String[] expectedPersonMissingFieldsMessages = { MISSING_BIRTH_DATE_MESSAGE, MISSING_PERSON_EMAIL,
 			MISSING_PERSON_ID_MESSAGE, MISSING_PERSON_NAME_MESSAGE };
 
@@ -275,12 +275,13 @@ class CarsControllerTest {
 
 	@Test
 	void addCarMissingFields() throws Exception {
-		CarDto carDtoMissingFields = new CarDto(null, null, 0, null, null, 0,  CarState.BAD);
+		CarDto carDtoMissingFields = new CarDto(null, null, 0, null, null, 0, null);
 		String jsonCarDto = mapper.writeValueAsString(carDtoMissingFields); // conversion from carDto object to string
 																			// JSON
 		String response = mockMvc
 				.perform(post("http://localhost:8080/cars").contentType(MediaType.APPLICATION_JSON).content(jsonCarDto))
 				.andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+		System.out.println(response);
 		allFieldsMissingTest(expectedCarMissingFieldsMessages, response);
 	}
 
