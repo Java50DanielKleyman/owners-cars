@@ -16,8 +16,8 @@ public interface ValidationConstants {
 	String MISSING_COLOR_MESSAGE = "Missing color";
 	String MISSING_KILOMETERS_MESSAGE = "Missing kilometers";
 	String MISSING_CAR_STATE_MESSAGE = "Missing car state";
-	long MAX_KILOMETERS = 0;
-	long MIN_KILOMETERS = 1500000;
+	long MIN_KILOMETERS = 0;
+	long MAX_KILOMETERS = 1500000;
 	long MIN_PERSON_ID_VALUE = 100000l;
 	long MAX_PERSON_ID_VALUE = 999999l;
 	long max_year = Calendar.getInstance().get(Calendar.YEAR);
