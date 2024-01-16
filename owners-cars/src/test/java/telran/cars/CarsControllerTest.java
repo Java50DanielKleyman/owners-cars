@@ -51,8 +51,8 @@ class CarsControllerTest {
 	CarsService carsService;
 	@Autowired // for injection of MockMvc from Application Context
 	MockMvc mockMvc;
-	CarDto carDto = new CarDto(CAR_NUMBER, "model", 1970, PERSON_ID, "RED", 100, carState1);
-	CarDto carDto1 = new CarDto("car123", "mode123", 1975, PERSON_ID1, "WHITE", 100, carState2);
+	CarDto carDto = new CarDto(CAR_NUMBER, "model", 1970, PERSON_ID, Colors.RED, 100, carState1);
+	CarDto carDto1 = new CarDto("car123", "mode123", 1975, PERSON_ID1,  Colors.RED, 100, carState2);
 	CarDto carDtoMissingFields = new CarDto(null, null,  0,  null,  null,  0, null);
 
 	@Autowired // for injection of ObjectMapper from Application context

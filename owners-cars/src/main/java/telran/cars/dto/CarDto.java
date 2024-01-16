@@ -14,56 +14,16 @@ public record CarDto(
 		int year,
 		@NotNull(message = MISSING_PERSON_ID_MESSAGE) @Min(value = MIN_PERSON_ID_VALUE, message = WRONG_MIN_PERSON_ID_VALUE) @Max(value = MAX_PERSON_ID_VALUE, message = WRONG_MAX_PERSON_ID_VALUE) 
 		Long id,
-		@NotEmpty(message = MISSING_COLOR_MESSAGE) 
-		String color,
+		@NotNull(message = MISSING_COLOR_MESSAGE) 
+		Colors color,
 		@NotNull(message = MISSING_KILOMETERS_MESSAGE) @Min(value = MIN_KILOMETERS, message = WRONG_MIN_KILOMETERS_MESSAGE) @Max(value = MAX_KILOMETERS, message = WRONG_MAX_KILOMETERS_MESSAGE) 
 		int kilometers,
 		@NotNull(message = MISSING_CAR_STATE_MESSAGE) 
 		CarState carState)
 
 {
-	public CarDto {
-		validateCarState(carState);
-//		validateColor(color);
-	}
-
-	private void validateColor(String color) {
-			if (!isValidColor(color)) {
-			throw new IllegalArgumentException(INVALID_COLOR_MESSAGE);
-		}
-
-	}
-
-	private boolean isValidColor(String color) {
-		Colors[] allowedColors = { Colors.RED, Colors.SILVER, Colors.WHITE };
-
-		for (Colors allowedColor : allowedColors) {
-			if (allowedColor.name().equals(color)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private void validateCarState(CarState carState) {
-		if(carState != null) {
-		if (!isValidCarState(carState)) {
-			throw new IllegalArgumentException(INVALID_CAR_STATE_MESSAGE);
-		}}
-	}
-
-	private boolean isValidCarState(CarState carState) {
-
-		CarState[] allowedStates = { CarState.OLD, CarState.NEW, CarState.GOOD, CarState.MIDDLE, CarState.BAD };
-
-		for (CarState allowedState : allowedStates) {
-			if (allowedState.equals(carState)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(number);
