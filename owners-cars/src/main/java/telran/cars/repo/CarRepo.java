@@ -6,5 +6,5 @@ import telran.cars.service.model.*;
 
 public interface CarRepo extends JpaRepository<Car, String> {
 Car findByCarOwnerId(long id);
-Car findByCarNumber(String number);
+Car findByNumber(String number);
 }

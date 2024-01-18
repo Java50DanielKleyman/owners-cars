@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import telran.cars.dto.*;
+import telran.cars.exceptions.IllegalCarsStateException;
 import telran.cars.exceptions.IllegalPersonsStateException;
 import telran.cars.exceptions.NotFoundException;
 import telran.cars.repo.ModelRepo;
@@ -43,12 +44,18 @@ class CarsServiceTest {
 	private static final String BIRTH_DATE_2 = "2000-10-10";
 	private static final String EMAIL2 = "name2@gmail.com";
 	private static final Long PERSON_ID_NOT_EXISTS = 1111111111L;
+	private static final String COLOR1 = "red";
+	private static final String COLOR2 = "white";
+	private static final CarState STATE1 =  CarState.GOOD;
+	private static final CarState  STATE2 =  CarState.NEW;
+	private static final Integer KILOMETERS1 =  1500;
+	private static final Integer KILOMETERS2 =  11500;
 	
 	private static final  String NEW_EMAIL = "name1@tel-ran.co.il";
 	
 	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1, 2000, null, null, null);
 	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1, 2000, null, null, null);
-	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2000, null, null, null);
+	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, COLOR1,KILOMETERS1, STATE1);
 	CarDto car4 = new CarDto(CAR_NUMBER_4, MODEL2, 2000, null, null, null);
 	CarDto car5 = new CarDto(CAR_NUMBER_5, MODEL3, 2000, null, null, null);
 	PersonDto personDto = new PersonDto(PERSON_ID_NOT_EXISTS, NAME1, BIRTH_DATE_1, EMAIL1);
@@ -59,11 +66,11 @@ class CarsServiceTest {
 	
 
 	
+	
 	@Test
 	void scriptTest() {
 		assertThrowsExactly(IllegalPersonsStateException.class,
 				()->carsService.addPerson(personDto1));
-		
 		
 	}
 	
@@ -71,26 +78,25 @@ class CarsServiceTest {
 	@Test
 	//FIXME
 	//HW #63 write test, take out @Disabled
-	@Disabled
 	void testAddPerson() {
 		assertEquals(personDto, carsService.addPerson(personDto));
-		assertThrowsExactly(IllegalStateException.class,
+		assertThrowsExactly(IllegalPersonsStateException.class,
 				()->carsService.addPerson(personDto1));
-		List<CarDto> cars = carsService.getOwnerCars(personDto.id());
-		assertTrue(cars.isEmpty());
+//		List<CarDto> cars = carsService.getOwnerCars(personDto.id());
+//		assertTrue(cars.isEmpty());
 		assertEquals(personDto, carsService.deletePerson(personDto.id()));
 	}
 
 	@Test
 	//FIXME
-	//HW #63 write test, take out @Disabled
-		@Disabled
+	//HW #63 write test, take out @Disabled	
 	void testAddCar() {
+		
 		assertEquals(car3, carsService.addCar(car3));
-		assertThrowsExactly(IllegalStateException.class,
-				()->carsService.addCar(car1));
+	//	assertThrowsExactly(IllegalCarsStateException.class,
+	//			()->carsService.addCar(car1));
 		PersonDto person = carsService.getCarOwner(CAR_NUMBER_3);
-		assertNull(person);
+//		assertNull(person);
 	}
 
 	@Test

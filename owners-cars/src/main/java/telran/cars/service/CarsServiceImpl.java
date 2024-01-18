@@ -73,7 +73,7 @@ public class CarsServiceImpl implements CarsService {
 		// find Car having being deleted owner
 		// If such car exists, set null as the car owner
 		// after that delete by the method deleteById from carOwnerRepo
-		return null;
+		return carOwner.build();
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class CarsServiceImpl implements CarsService {
 		}
 		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarNumber(carNumber);
 		tradeDeals.forEach(tradeDealRepo::delete);
-		Car car = carRepo.findByCarNumber(carNumber);
+		Car car = carRepo.findByNumber(carNumber);
 		carRepo.deleteById(carNumber);
 		log.debug("Car {} has been deleted", car);
 		// TODO
