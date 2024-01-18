@@ -78,12 +78,13 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public CarDto deleteCar(String carNumber) {
-		Car car = carRepo.findByCarNumber(carNumber);
-		if (car == null) {
+
+		if (!carRepo.existsById(carNumber)) {
 			throw new CarNotFoundException();
 		}
 		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarNumber(carNumber);
 		tradeDeals.forEach(tradeDealRepo::delete);
+		Car car = carRepo.findByCarNumber(carNumber);
 		carRepo.deleteById(carNumber);
 		log.debug("Car {} has been deleted", car);
 		// TODO
@@ -133,9 +134,15 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public ModelDto addModel(ModelDto modelDto) {
+		if (modelRepo.existsById(new ModelYear(modelDto.getModelName(), modelDto.getModelYear()))) {
+			throw new IllegalCarsStateException();
+		}
+		Model model = Model.of(modelDto);
+		modelRepo.save(model);
+		log.debug("Model {} has been saved", model);
 		// TODO Auto-generated method stub
 		// HW #63 Write the method similar to the method addPerson
-		return null;
+		return modelDto;
 	}
 
 }
