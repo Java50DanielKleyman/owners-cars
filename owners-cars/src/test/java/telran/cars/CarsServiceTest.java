@@ -47,18 +47,12 @@ class CarsServiceTest {
 	private static final String BIRTH_DATE_2 = "2000-10-10";
 	private static final String EMAIL2 = "name2@gmail.com";
 	private static final Long PERSON_ID_NOT_EXISTS = 1111111111L;
-	private static final String COLOR1 = "red";
-	private static final String COLOR2 = "white";
-	private static final CarState STATE1 = CarState.GOOD;
-	private static final CarState STATE2 = CarState.NEW;
-	private static final Integer KILOMETERS1 = 1500;
-	private static final Integer KILOMETERS2 = 11500;
 
 	private static final String NEW_EMAIL = "name1@tel-ran.co.il";
 
 	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1, 2000, null, null, null);
 	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1, 2000, null, null, null);
-//	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, COLOR1,KILOMETERS1, STATE1);
+
 	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, null, null, null);
 	CarDto car4 = new CarDto(CAR_NUMBER_4, MODEL2, 2000, null, null, null);
 	CarDto car5 = new CarDto(CAR_NUMBER_5, MODEL3, 2000, null, null, null);
