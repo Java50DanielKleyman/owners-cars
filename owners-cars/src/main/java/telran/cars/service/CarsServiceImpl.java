@@ -63,9 +63,11 @@ public class CarsServiceImpl implements CarsService {
 	public PersonDto deletePerson(long id) {
 		CarOwner carOwner = carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException());
 		Car car = carRepo.findByCarOwnerId(id);
+		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarOwner_Id(id);
+		tradeDealRepo.deleteAll(tradeDeals);
 		if (car != null) {
 			car.setCarOwner(null);
-		}
+		}		
 		carOwnerRepo.deleteById(id);
 		log.debug("Carowner {} has been deleted", carOwner);
 		// TODO
@@ -83,7 +85,7 @@ public class CarsServiceImpl implements CarsService {
 			throw new CarNotFoundException();
 		}
 		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarNumber(carNumber);
-		tradeDeals.forEach(tradeDealRepo::delete);
+		tradeDealRepo.deleteAll(tradeDeals);
 		Car car = carRepo.findByNumber(carNumber);
 		carRepo.deleteById(carNumber);
 		log.debug("Car {} has been deleted", car);
