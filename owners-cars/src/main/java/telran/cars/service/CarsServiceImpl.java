@@ -94,7 +94,7 @@ public class CarsServiceImpl implements CarsService {
 		// find all TradeDeal entities for a given Car
 		// delete all such entities
 		// delete by the method deleteById from CarRepo
-		return null;
+		return car.build();
 	}
 
 	@Override
