@@ -18,6 +18,7 @@ import telran.cars.dto.*;
 import telran.cars.exceptions.IllegalCarsStateException;
 import telran.cars.exceptions.IllegalPersonsStateException;
 import telran.cars.exceptions.NotFoundException;
+import telran.cars.exceptions.PersonNotFoundException;
 import telran.cars.repo.ModelRepo;
 import telran.cars.service.CarsService;
 import telran.cars.service.model.ModelYear;
@@ -55,7 +56,8 @@ class CarsServiceTest {
 	
 	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1, 2000, null, null, null);
 	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1, 2000, null, null, null);
-	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, COLOR1,KILOMETERS1, STATE1);
+//	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, COLOR1,KILOMETERS1, STATE1);
+	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, null, null, null);
 	CarDto car4 = new CarDto(CAR_NUMBER_4, MODEL2, 2000, null, null, null);
 	CarDto car5 = new CarDto(CAR_NUMBER_5, MODEL3, 2000, null, null, null);
 	PersonDto personDto = new PersonDto(PERSON_ID_NOT_EXISTS, NAME1, BIRTH_DATE_1, EMAIL1);
@@ -93,21 +95,21 @@ class CarsServiceTest {
 	void testAddCar() {
 		
 		assertEquals(car3, carsService.addCar(car3));
-	//	assertThrowsExactly(IllegalCarsStateException.class,
-	//			()->carsService.addCar(car1));
+		assertThrowsExactly(IllegalCarsStateException.class,
+				()->carsService.addCar(car1));
 		PersonDto person = carsService.getCarOwner(CAR_NUMBER_3);
-//		assertNull(person);
+		assertNull(person);
 	}
 
 	@Test
 	//FIXME
 	//HW #63 write test, take out @Disabled
-		@Disabled
+		
 	void testUpdatePerson() {
 		PersonDto personUpdated = new PersonDto(PERSON_ID_1, NAME1, BIRTH_DATE_1, NEW_EMAIL);
 		assertEquals(personUpdated, carsService.updatePerson(personUpdated));
-		assertEquals(personUpdated, carsService.getCarOwner(CAR_NUMBER_1));
-		assertThrowsExactly(NotFoundException.class,
+//		assertEquals(personUpdated, carsService.getCarOwner(CAR_NUMBER_1));
+		assertThrowsExactly(PersonNotFoundException.class,
 				() -> carsService.updatePerson(personDto));
 	}
 

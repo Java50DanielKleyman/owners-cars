@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 @Embeddable
 @EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class ModelYear implements Serializable {
