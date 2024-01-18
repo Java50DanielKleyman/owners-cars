@@ -2,6 +2,7 @@ package telran.cars.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,7 @@ public class CarsServiceImpl implements CarsService {
 			car.setCarOwner(null);
 		}
 		carOwnerRepo.deleteById(id);
+		log.debug("Carowner {} has been deleted", carOwner);
 		// TODO
 		// HW #63
 		// find Car having being deleted owner
@@ -76,6 +78,14 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public CarDto deleteCar(String carNumber) {
+		Car car = carRepo.findByCarNumber(carNumber);
+		if (car == null) {
+			throw new CarNotFoundException();
+		}
+		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarNumber(carNumber);
+		tradeDeals.forEach(tradeDealRepo::delete);
+		carRepo.deleteById(carNumber);
+		log.debug("Car {} has been deleted", car);
 		// TODO
 		// HW #63
 		// find all TradeDeal entities for a given Car
