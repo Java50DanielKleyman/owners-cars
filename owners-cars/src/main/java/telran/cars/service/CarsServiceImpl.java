@@ -67,7 +67,7 @@ public class CarsServiceImpl implements CarsService {
 		tradeDealRepo.deleteAll(tradeDeals);
 		if (car != null) {
 			car.setCarOwner(null);
-		}		
+		}
 		carOwnerRepo.deleteById(id);
 		log.debug("Carowner {} has been deleted", carOwner);
 		// TODO

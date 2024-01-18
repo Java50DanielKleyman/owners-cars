@@ -20,23 +20,23 @@ import telran.cars.exceptions.IllegalCarsStateException;
 import telran.cars.exceptions.IllegalPersonsStateException;
 import telran.cars.exceptions.NotFoundException;
 import telran.cars.exceptions.PersonNotFoundException;
+import telran.cars.exceptions.TradeDealIllegalStateException;
 import telran.cars.repo.ModelRepo;
 import telran.cars.service.CarsService;
 import telran.cars.service.model.ModelYear;
 
-
 @SpringBootTest
 //FIXME accordingly to SQL script
-@Sql(scripts = {"classpath:test_data.sql"})
+@Sql(scripts = { "classpath:test_data.sql" })
 class CarsServiceTest {
 	private static final String MODEL1 = "model1";
 	private static final String MODEL2 = "model2";
 	private static final String MODEL3 = "model3";
 	private static final String CAR_NUMBER_1 = "111-11-111";
 	private static final String CAR_NUMBER_2 = "222-22-222";
-	private static final  String CAR_NUMBER_3 = "333-33-333";
-	private static final  String CAR_NUMBER_4 = "444-44-444";
-	private static final  String CAR_NUMBER_5 = "555-55-555";
+	private static final String CAR_NUMBER_3 = "333-33-333";
+	private static final String CAR_NUMBER_4 = "444-44-444";
+	private static final String CAR_NUMBER_5 = "555-55-555";
 	private static final Long PERSON_ID_1 = 123l;
 	private static final String NAME1 = "name1";
 	private static final String BIRTH_DATE_1 = "2000-10-10";
@@ -49,13 +49,13 @@ class CarsServiceTest {
 	private static final Long PERSON_ID_NOT_EXISTS = 1111111111L;
 	private static final String COLOR1 = "red";
 	private static final String COLOR2 = "white";
-	private static final CarState STATE1 =  CarState.GOOD;
-	private static final CarState  STATE2 =  CarState.NEW;
-	private static final Integer KILOMETERS1 =  1500;
-	private static final Integer KILOMETERS2 =  11500;
-	
-	private static final  String NEW_EMAIL = "name1@tel-ran.co.il";
-	
+	private static final CarState STATE1 = CarState.GOOD;
+	private static final CarState STATE2 = CarState.NEW;
+	private static final Integer KILOMETERS1 = 1500;
+	private static final Integer KILOMETERS2 = 11500;
+
+	private static final String NEW_EMAIL = "name1@tel-ran.co.il";
+
 	CarDto car1 = new CarDto(CAR_NUMBER_1, MODEL1, 2000, null, null, null);
 	CarDto car2 = new CarDto(CAR_NUMBER_2, MODEL1, 2000, null, null, null);
 //	CarDto car3 = new CarDto(CAR_NUMBER_3, MODEL2, 2020, COLOR1,KILOMETERS1, STATE1);
@@ -67,58 +67,50 @@ class CarsServiceTest {
 	PersonDto personDto2 = new PersonDto(PERSON_ID_2, NAME2, BIRTH_DATE_2, EMAIL2);
 	@Autowired
 	CarsService carsService;
-	
 
-	
-	
 	@Test
 	void scriptTest() {
-		assertThrowsExactly(IllegalPersonsStateException.class,
-				()->carsService.addPerson(personDto1));
-		
+		assertThrowsExactly(IllegalPersonsStateException.class, () -> carsService.addPerson(personDto1));
+
 	}
-	
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
+	// FIXME
+	// HW #63 write test, take out @Disabled
 	void testAddPerson() {
 		assertEquals(personDto, carsService.addPerson(personDto));
-		assertThrowsExactly(IllegalPersonsStateException.class,
-				()->carsService.addPerson(personDto1));
+		assertThrowsExactly(IllegalPersonsStateException.class, () -> carsService.addPerson(personDto1));
 //		List<CarDto> cars = carsService.getOwnerCars(personDto.id());
 //		assertTrue(cars.isEmpty());
 		assertEquals(personDto, carsService.deletePerson(personDto.id()));
 	}
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled	
+	// FIXME
+	// HW #63 write test, take out @Disabled
 	void testAddCar() {
-		
+
 		assertEquals(car3, carsService.addCar(car3));
-		assertThrowsExactly(IllegalCarsStateException.class,
-				()->carsService.addCar(car1));
+		assertThrowsExactly(IllegalCarsStateException.class, () -> carsService.addCar(car1));
 		PersonDto person = carsService.getCarOwner(CAR_NUMBER_3);
 		assertNull(person);
 	}
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-		
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testUpdatePerson() {
 		PersonDto personUpdated = new PersonDto(PERSON_ID_1, NAME1, BIRTH_DATE_1, NEW_EMAIL);
 		assertEquals(personUpdated, carsService.updatePerson(personUpdated));
 //		assertEquals(personUpdated, carsService.getCarOwner(CAR_NUMBER_1));
-		assertThrowsExactly(PersonNotFoundException.class,
-				() -> carsService.updatePerson(personDto));
+		assertThrowsExactly(PersonNotFoundException.class, () -> carsService.updatePerson(personDto));
 	}
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-		
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testDeletePerson() {
 //		List<CarDto> cars = carsService.getOwnerCars(PERSON_ID_1);
 		assertEquals(personDto1, carsService.deletePerson(PERSON_ID_1));
@@ -127,9 +119,9 @@ class CarsServiceTest {
 	}
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-	
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testDeleteCar() {
 //		Long id = carsService.getCarOwner(CAR_NUMBER_1).id();
 		assertEquals(car1, carsService.deleteCar(CAR_NUMBER_1));
@@ -138,46 +130,47 @@ class CarsServiceTest {
 	}
 
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-		
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testPurchaseNewCarOwner() {
 		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1, PERSON_ID_2, PURCHASE_DATE1);
 		assertEquals(tradeDeal, carsService.purchase(tradeDeal));
 //		assertEquals(personDto2, carsService.getCarOwner(CAR_NUMBER_1));
 //		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
 //		assertTrue(carsService.getOwnerCars(PERSON_ID_2).contains(car1));
-		
+
 	}
+
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-		
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testPurchaseNotFound() {
 		TradeDealDto tradeDealCarNotFound = new TradeDealDto(CAR_NUMBER_3, PERSON_ID_1, PURCHASE_DATE1);
-		TradeDealDto tradeDealOwnerNotFound = new TradeDealDto(CAR_NUMBER_1,
-				PERSON_ID_NOT_EXISTS, PURCHASE_DATE1);
+		TradeDealDto tradeDealOwnerNotFound = new TradeDealDto(CAR_NUMBER_1, PERSON_ID_NOT_EXISTS, PURCHASE_DATE1);
 		assertThrowsExactly(PersonNotFoundException.class, () -> carsService.purchase(tradeDealOwnerNotFound));
 		assertThrowsExactly(CarNotFoundException.class, () -> carsService.purchase(tradeDealCarNotFound));
-		
+
 	}
+
 	@Test
-	//FIXME
-	//HW #63 write test, take out @Disabled
-		@Disabled
+	// FIXME
+	// HW #63 write test, take out @Disabled
+
 	void testPurchaseNoCarOwner() {
-		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1,null, null);
+		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1, null, PURCHASE_DATE1);
 		assertEquals(tradeDeal, carsService.purchase(tradeDeal));
-		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
-		assertNull(carsService.getCarOwner(CAR_NUMBER_1));
+//		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
+//		assertNull(carsService.getCarOwner(CAR_NUMBER_1));
 	}
+
 	@Test
-	//HW #63 write test, take out @Disabled
-		@Disabled
+	// HW #63 write test, take out @Disabled
+
 	void testPurchaseSameOwner() {
-		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1,PERSON_ID_1, null);
-		assertThrowsExactly(IllegalStateException.class,
-				() -> carsService.purchase(tradeDeal));
+		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1, PERSON_ID_1, PURCHASE_DATE1);
+		assertThrowsExactly(TradeDealIllegalStateException.class, () -> carsService.purchase(tradeDeal));
 	}
 
 	@Test
@@ -186,8 +179,7 @@ class CarsServiceTest {
 		List<CarDto> cars = carsService.getOwnerCars(PERSON_ID_1);
 		assertEquals(1, cars.size());
 		assertEquals(car1, cars.get(0));
-		assertThrowsExactly(NotFoundException.class,
-				() -> carsService.getOwnerCars(PERSON_ID_NOT_EXISTS));
+		assertThrowsExactly(NotFoundException.class, () -> carsService.getOwnerCars(PERSON_ID_NOT_EXISTS));
 	}
 
 	@Test
@@ -197,6 +189,7 @@ class CarsServiceTest {
 		assertEquals(personDto1, ownerActual);
 		assertThrowsExactly(NotFoundException.class, () -> carsService.getCarOwner(CAR_NUMBER_3));
 	}
+
 	@Test
 	@Disabled
 	void testMostPopularModels() {
@@ -209,16 +202,9 @@ class CarsServiceTest {
 		List<String> mostPopularModels = carsService.mostPopularModels();
 		String[] actual = mostPopularModels.toArray(String[]::new);
 		Arrays.sort(actual);
-		String[] expected = {
-				MODEL1, MODEL2
-		};
+		String[] expected = { MODEL1, MODEL2 };
 		assertArrayEquals(expected, actual);
-		
+
 	}
-
-
-
-	
-	
 
 }
