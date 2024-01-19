@@ -58,6 +58,7 @@ public class CarsServiceImpl implements CarsService {
 	public PersonDto updatePerson(PersonDto personDto) {
 		CarOwner carOwner = carOwnerRepo.findById(personDto.id()).orElseThrow(() -> new PersonNotFoundException());
 		carOwner.setEmail(personDto.email());
+		carOwnerRepo.save(carOwner);
 		return carOwner.build();
 	}
 
@@ -72,6 +73,7 @@ public class CarsServiceImpl implements CarsService {
 			cars.forEach(car -> car.setCarOwner(null));
 		}
 		carOwnerRepo.deleteById(id);
+		cars.forEach(car -> carRepo.save(car));
 		log.debug("Carowner {} has been deleted", carOwner);
 		// TODO
 		// HW #63
