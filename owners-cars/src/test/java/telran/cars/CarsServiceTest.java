@@ -190,9 +190,9 @@ class CarsServiceTest {
 		carsService.addCar(car3);
 		carsService.addCar(car4);
 		carsService.addCar(car5);
-		carsService.purchase(new TradeDealDto(CAR_NUMBER_3, PERSON_ID_1, null));
-		carsService.purchase(new TradeDealDto(CAR_NUMBER_4, PERSON_ID_2, null));
-		carsService.purchase(new TradeDealDto(CAR_NUMBER_5, PERSON_ID_2, null));
+		carsService.purchase(new TradeDealDto(CAR_NUMBER_3, PERSON_ID_1, PURCHASE_DATE1));
+		carsService.purchase(new TradeDealDto(CAR_NUMBER_4, PERSON_ID_2, PURCHASE_DATE1));
+		carsService.purchase(new TradeDealDto(CAR_NUMBER_5, PERSON_ID_2, PURCHASE_DATE1));
 		List<String> mostPopularModels = carsService.mostPopularModels();
 		String[] actual = mostPopularModels.toArray(String[]::new);
 		Arrays.sort(actual);

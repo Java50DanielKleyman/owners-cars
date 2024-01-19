@@ -3,7 +3,9 @@ package telran.cars.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +107,7 @@ public class CarsServiceImpl implements CarsService {
 		Long personId = tradeDealDto.personId();
 		if (personId != null) {
 			carOwner = carOwnerRepo.findById(personId).orElseThrow(() -> new PersonNotFoundException());
-			if (car.getCarOwner().getId()==personId) {
+			if (car.getCarOwner().getId() == personId) {
 				throw new TradeDealIllegalStateException();
 			}
 		}
@@ -145,9 +147,17 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public List<String> mostPopularModels() {
-		// Not Implemented yet
+		List<Car> cars = carRepo.findAll();
+		 Map<String, Long> modelOccurrences = cars.stream()
+		            .map(car -> car.getModel().getModelYear().getName())
+		            .collect(Collectors.groupingBy(modelName -> modelName, Collectors.counting()));
+		 List<String> mostPopularModels = modelOccurrences.entrySet().stream()
+		            .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+		            .limit(2)
+		            .map(Map.Entry::getKey)
+		            .collect(Collectors.toList());
 
-		return null;
+		    return mostPopularModels; 
 	}
 
 	@Override
