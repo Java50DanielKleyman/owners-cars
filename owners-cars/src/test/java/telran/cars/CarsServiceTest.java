@@ -181,7 +181,7 @@ class CarsServiceTest {
 	void testGetCarOwner() {
 		PersonDto ownerActual = carsService.getCarOwner(CAR_NUMBER_1);
 		assertEquals(personDto1, ownerActual);
-//		assertThrowsExactly(NotFoundException.class, () -> carsService.getCarOwner(CAR_NUMBER_3));
+		assertThrowsExactly(CarNotFoundException.class, () -> carsService.getCarOwner(CAR_NUMBER_3));
 	}
 
 	@Test
