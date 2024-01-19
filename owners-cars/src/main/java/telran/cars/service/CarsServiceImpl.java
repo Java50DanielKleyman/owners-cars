@@ -1,6 +1,7 @@
 package telran.cars.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,11 +63,11 @@ public class CarsServiceImpl implements CarsService {
 	@Transactional
 	public PersonDto deletePerson(long id) {
 		CarOwner carOwner = carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException());
-		Car car = carRepo.findByCarOwnerId(id);
+		List<Car> cars = carRepo.findByCarOwnerId(id);
 		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarOwner_Id(id);
 		tradeDealRepo.deleteAll(tradeDeals);
-		if (car != null) {
-			car.setCarOwner(null);
+		if (!cars.isEmpty()) {
+			cars.forEach(car -> car.setCarOwner(null));
 		}
 		carOwnerRepo.deleteById(id);
 		log.debug("Carowner {} has been deleted", carOwner);
@@ -117,13 +118,25 @@ public class CarsServiceImpl implements CarsService {
 
 	@Override
 	public List<CarDto> getOwnerCars(long id) {
-		// Not Implemented yet
-		return null;
+		if (!carOwnerRepo.existsById(id)) {
+			throw new PersonNotFoundException();
+		}
+		List<Car> cars = carRepo.findByCarOwnerId(id);
+		List<CarDto> carsDto = new ArrayList<>();
+		cars.forEach(car -> carsDto.add(car.build()));
+		return carsDto;
 	}
 
 	@Override
 	public PersonDto getCarOwner(String carNumber) {
-		// Not Implemented yet
+		if (!carRepo.existsById(carNumber)) {
+			throw new CarNotFoundException();
+		}
+		Car car = carRepo.findByNumber(carNumber);
+		if (car.getCarOwner() != null) {
+			Long id = car.getCarOwner().getId();
+			carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException()).build();
+		}
 		return null;
 	}
 

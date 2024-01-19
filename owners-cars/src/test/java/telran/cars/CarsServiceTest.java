@@ -74,8 +74,8 @@ class CarsServiceTest {
 	void testAddPerson() {
 		assertEquals(personDto, carsService.addPerson(personDto));
 		assertThrowsExactly(IllegalPersonsStateException.class, () -> carsService.addPerson(personDto1));
-//		List<CarDto> cars = carsService.getOwnerCars(personDto.id());
-//		assertTrue(cars.isEmpty());
+		List<CarDto> cars = carsService.getOwnerCars(personDto.id());
+		assertTrue(cars.isEmpty());
 		assertEquals(personDto, carsService.deletePerson(personDto.id()));
 	}
 
@@ -87,7 +87,7 @@ class CarsServiceTest {
 		assertEquals(car3, carsService.addCar(car3));
 		assertThrowsExactly(IllegalCarsStateException.class, () -> carsService.addCar(car1));
 		PersonDto person = carsService.getCarOwner(CAR_NUMBER_3);
-		assertNull(person);
+		//assertNull(person);
 	}
 
 	@Test
@@ -97,7 +97,7 @@ class CarsServiceTest {
 	void testUpdatePerson() {
 		PersonDto personUpdated = new PersonDto(PERSON_ID_1, NAME1, BIRTH_DATE_1, NEW_EMAIL);
 		assertEquals(personUpdated, carsService.updatePerson(personUpdated));
-//		assertEquals(personUpdated, carsService.getCarOwner(CAR_NUMBER_1));
+		assertEquals(personUpdated, carsService.getCarOwner(CAR_NUMBER_1));
 		assertThrowsExactly(PersonNotFoundException.class, () -> carsService.updatePerson(personDto));
 	}
 

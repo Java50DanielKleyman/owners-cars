@@ -1,10 +1,13 @@
 package telran.cars.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import telran.cars.service.model.*;
 
 public interface CarRepo extends JpaRepository<Car, String> {
-Car findByCarOwnerId(long id);
+
 Car findByNumber(String number);
+List<Car>findByCarOwnerId(long id);
 }
