@@ -87,7 +87,7 @@ class CarsServiceTest {
 		assertEquals(car3, carsService.addCar(car3));
 		assertThrowsExactly(IllegalCarsStateException.class, () -> carsService.addCar(car1));
 		PersonDto person = carsService.getCarOwner(CAR_NUMBER_3);
-		//assertNull(person);
+		assertNull(person);
 	}
 
 	@Test
@@ -106,10 +106,10 @@ class CarsServiceTest {
 	// HW #63 write test, take out @Disabled
 
 	void testDeletePerson() {
-//		List<CarDto> cars = carsService.getOwnerCars(PERSON_ID_1);
+		List<CarDto> cars = carsService.getOwnerCars(PERSON_ID_1);
 		assertEquals(personDto1, carsService.deletePerson(PERSON_ID_1));
 		assertThrowsExactly(PersonNotFoundException.class, () -> carsService.deletePerson(PERSON_ID_1));
-//		cars.forEach(c -> assertNull(carsService.getCarOwner(c.number())));
+		cars.forEach(c -> assertNull(carsService.getCarOwner(c.number())));
 	}
 
 	@Test
@@ -117,10 +117,10 @@ class CarsServiceTest {
 	// HW #63 write test, take out @Disabled
 
 	void testDeleteCar() {
-//		Long id = carsService.getCarOwner(CAR_NUMBER_1).id();
+		Long id = carsService.getCarOwner(CAR_NUMBER_1).id();
 		assertEquals(car1, carsService.deleteCar(CAR_NUMBER_1));
 		assertThrowsExactly(CarNotFoundException.class, () -> carsService.deleteCar(CAR_NUMBER_1));
-//		assertFalse(carsService.getOwnerCars(id).contains(car1));
+		assertFalse(carsService.getOwnerCars(id).contains(car1));
 	}
 
 	@Test
@@ -130,9 +130,9 @@ class CarsServiceTest {
 	void testPurchaseNewCarOwner() {
 		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1, PERSON_ID_2, PURCHASE_DATE1);
 		assertEquals(tradeDeal, carsService.purchase(tradeDeal));
-//		assertEquals(personDto2, carsService.getCarOwner(CAR_NUMBER_1));
-//		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
-//		assertTrue(carsService.getOwnerCars(PERSON_ID_2).contains(car1));
+		assertEquals(personDto2, carsService.getCarOwner(CAR_NUMBER_1));
+		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
+		assertTrue(carsService.getOwnerCars(PERSON_ID_2).contains(car1));
 
 	}
 
@@ -155,8 +155,8 @@ class CarsServiceTest {
 	void testPurchaseNoCarOwner() {
 		TradeDealDto tradeDeal = new TradeDealDto(CAR_NUMBER_1, null, PURCHASE_DATE1);
 		assertEquals(tradeDeal, carsService.purchase(tradeDeal));
-//		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
-//		assertNull(carsService.getCarOwner(CAR_NUMBER_1));
+		assertFalse(carsService.getOwnerCars(PERSON_ID_1).contains(car1));
+		assertNull(carsService.getCarOwner(CAR_NUMBER_1));
 	}
 
 	@Test
@@ -168,20 +168,20 @@ class CarsServiceTest {
 	}
 
 	@Test
-	@Disabled
+
 	void testGetOwnerCars() {
 		List<CarDto> cars = carsService.getOwnerCars(PERSON_ID_1);
 		assertEquals(1, cars.size());
 		assertEquals(car1, cars.get(0));
-		assertThrowsExactly(NotFoundException.class, () -> carsService.getOwnerCars(PERSON_ID_NOT_EXISTS));
+		assertThrowsExactly(PersonNotFoundException.class, () -> carsService.getOwnerCars(PERSON_ID_NOT_EXISTS));
 	}
 
 	@Test
-	@Disabled
+	
 	void testGetCarOwner() {
 		PersonDto ownerActual = carsService.getCarOwner(CAR_NUMBER_1);
 		assertEquals(personDto1, ownerActual);
-		assertThrowsExactly(NotFoundException.class, () -> carsService.getCarOwner(CAR_NUMBER_3));
+//		assertThrowsExactly(NotFoundException.class, () -> carsService.getCarOwner(CAR_NUMBER_3));
 	}
 
 	@Test

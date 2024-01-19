@@ -56,7 +56,7 @@ public class CarsServiceImpl implements CarsService {
 	public PersonDto updatePerson(PersonDto personDto) {
 		CarOwner carOwner = carOwnerRepo.findById(personDto.id()).orElseThrow(() -> new PersonNotFoundException());
 		carOwner.setEmail(personDto.email());
-		return personDto;
+		return carOwner.build();
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class CarsServiceImpl implements CarsService {
 		Long personId = tradeDealDto.personId();
 		if (personId != null) {
 			carOwner = carOwnerRepo.findById(personId).orElseThrow(() -> new PersonNotFoundException());
-			if (car.getCarOwner().getId() == personId) {
+			if (car.getCarOwner().getId()==personId) {
 				throw new TradeDealIllegalStateException();
 			}
 		}
@@ -113,6 +113,9 @@ public class CarsServiceImpl implements CarsService {
 		tradeDeal.setCar(car);
 		tradeDeal.setCarOwner(carOwner);
 		tradeDeal.setDate(LocalDate.parse(tradeDealDto.date()));
+		car.setCarOwner(carOwner);
+		carRepo.save(car);
+		tradeDealRepo.save(tradeDeal);
 		return tradeDealDto;
 	}
 
@@ -135,7 +138,7 @@ public class CarsServiceImpl implements CarsService {
 		Car car = carRepo.findByNumber(carNumber);
 		if (car.getCarOwner() != null) {
 			Long id = car.getCarOwner().getId();
-			carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException()).build();
+			return carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException()).build();
 		}
 		return null;
 	}
