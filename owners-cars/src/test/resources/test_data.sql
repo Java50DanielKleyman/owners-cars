@@ -18,7 +18,7 @@ insert into cars (car_number, color, kilometers, car_state, model_name, model_ye
 ('333-11-111', 'white', 0, 'NEW', 'model4', 2023, 125),
 ('666-11-111', 'silver', 10000, 'OLD', 'model1', 2020, 124),
 ('777-11-111', 'white', 0, 'NEW', 'model4', 2023, 125),
-('999-11-111', 'white', 0, 'NEW', 'model3', 2021, 124);
+('999-11-111', 'red', 0, 'NEW', 'model3', 2021, 124);
 
 
 insert into trade_deals ( date, car_number, owner_id) values 

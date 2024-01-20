@@ -190,6 +190,7 @@ public class CarsServiceImpl implements CarsService {
 			throw new ModelIllegalStateException();
 		}
 		String res = modelRepo.findOneMostPopularColorModel(model);
+		log.debug("most popular color of model {} is {}",model, res);
 		return res;
 	}
 

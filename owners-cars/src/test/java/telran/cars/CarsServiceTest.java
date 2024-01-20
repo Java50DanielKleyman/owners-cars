@@ -222,8 +222,8 @@ class CarsServiceTest {
 		assertEquals(2, modelNameAmounts.get(1).getAmount());
 		assertEquals("model3", modelNameAmounts.get(2).getName());
 		assertEquals(1, modelNameAmounts.get(2).getAmount());
-		assertThrowsExactly(IndexOutOfBoundsException.class, () ->
-		carsService.mostPopularModelNames(2).get(2).getAmount());
+		assertThrowsExactly(IndexOutOfBoundsException.class,
+				() -> carsService.mostPopularModelNames(2).get(2).getAmount());
 
 	}
 
@@ -232,9 +232,9 @@ class CarsServiceTest {
 	void testCountTradeDealAtMonthModel() {
 		long modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL4, 4, 2023);
 		assertEquals(1, modelNameAmount1);
-		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);	
+		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);
 		assertEquals(3, modelNameAmount1);
-		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 9, 2021);	
+		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 9, 2021);
 		assertEquals(0, modelNameAmount1);
 	}
 
@@ -260,7 +260,13 @@ class CarsServiceTest {
 	@Test
 	void testOneMostPopularColorModel() {
 		String color = carsService.oneMostPopularColorModel(MODEL1);
-		assertEquals("silver" , color);
+		assertEquals("silver", color);
+		color = carsService.oneMostPopularColorModel(MODEL3);
+		assertEquals("red", color);
+		color = carsService.oneMostPopularColorModel(MODEL4);
+		assertEquals("white", color);
+		color = carsService.oneMostPopularColorModel(MODEL2);
+		assertEquals(null, color);
 	}
 
 	@Test
