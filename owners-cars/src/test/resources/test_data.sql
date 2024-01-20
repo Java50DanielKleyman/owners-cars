@@ -23,5 +23,6 @@ insert into cars (car_number, color, kilometers, car_state, model_name, model_ye
 
 insert into trade_deals ( date, car_number, owner_id) values 
 ( '2023-03-10', '111-11-111', 123),
+( '2023-03-11', '111-11-111', 125),
 ( '2023-03-24', '222-11-111', 124),
 ( '2023-04-01', '333-11-111', 125);

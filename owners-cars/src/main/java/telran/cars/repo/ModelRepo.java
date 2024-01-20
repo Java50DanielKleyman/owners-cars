@@ -25,4 +25,5 @@ List<ModelNameAmount> findMostPopularModelNames(int nModels);
 		+  "and model_name = :modelName", nativeQuery=true)
 		
 ModelNameAmount findCountTradeDealAtMonthModel(String modelName, int month, int year);
+boolean existsByModelYearName(String modelName);
 }

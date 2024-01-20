@@ -225,7 +225,9 @@ class CarsServiceTest {
 	// tests for the methods of the HW #64
 	@Test
 	void testCountTradeDealAtMonthModel() {
-		// TODO
+		long modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);
+		assertEquals(2, modelNameAmount1);
+		
 	}
 
 	@Test
