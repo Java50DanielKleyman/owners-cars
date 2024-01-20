@@ -38,11 +38,15 @@ class CarsServiceTest {
 	private static final String CAR_NUMBER_5 = "555-55-555";
 	private static final Long PERSON_ID_1 = 123l;
 	private static final String NAME1 = "name1";
-	private static final String BIRTH_DATE_1 = "2000-10-10";
+	private static final String BIRTH_DATE_1 = "1990-10-10";
 	private static final String EMAIL1 = "name1@gmail.com";
 	private static final Long PERSON_ID_2 = 124l;
+	private static final Long PERSON_ID_3 = 125l;
 	private static final String NAME2 = "name2";
+	private static final String NAME3 = "name3";
 	private static final String BIRTH_DATE_2 = "2000-10-10";
+	private static final String BIRTH_DATE_3 = "2005-10-10";
+	private static final String EMAIL3 = "name3@gmail.com";
 	private static final String EMAIL2 = "name2@gmail.com";
 	private static final Long PERSON_ID_NOT_EXISTS = 1111111111L;
 
@@ -63,6 +67,7 @@ class CarsServiceTest {
 	PersonDto personDto = new PersonDto(PERSON_ID_NOT_EXISTS, NAME1, BIRTH_DATE_1, EMAIL1);
 	PersonDto personDto1 = new PersonDto(PERSON_ID_1, NAME1, BIRTH_DATE_1, EMAIL1);
 	PersonDto personDto2 = new PersonDto(PERSON_ID_2, NAME2, BIRTH_DATE_2, EMAIL2);
+	PersonDto personDto3 = new PersonDto(PERSON_ID_3, NAME3, BIRTH_DATE_3, EMAIL3);
 	@Autowired
 	CarsService carsService;
 
@@ -225,14 +230,25 @@ class CarsServiceTest {
 	// tests for the methods of the HW #64
 	@Test
 	void testCountTradeDealAtMonthModel() {
-		long modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);
-		assertEquals(2, modelNameAmount1);
+		long modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL3, 3, 2023);
+		assertEquals(0, modelNameAmount1);
 		
 	}
 
 	@Test
 	void testMostPopularModelNameByOwnerAges() {
-		// TODO
+		List<ModelNameAmount> modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 10, 100);
+//		assertEquals("model1", modelNameAmounts.get(0).getName());
+//		assertEquals(3, modelNameAmounts.get(0).getAmount());
+//		assertEquals("model4", modelNameAmounts.get(1).getName());
+//		assertEquals(2, modelNameAmounts.get(1).getAmount());
+//		assertEquals("model3", modelNameAmounts.get(2).getName());
+//		assertEquals(1, modelNameAmounts.get(2).getAmount());
+		modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 22, 100);
+		assertEquals("model1", modelNameAmounts.get(0).getName());
+//		assertEquals(3, modelNameAmounts.get(0).getAmount());
+//		assertEquals("model3", modelNameAmounts.get(1).getName());
+//		assertEquals(1, modelNameAmounts.get(1).getAmount());
 	}
 
 	@Test

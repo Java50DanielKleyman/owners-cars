@@ -164,6 +164,8 @@ public class CarsServiceImpl implements CarsService {
 			throw new ModelIllegalStateException();
 		}
 		ModelNameAmount res = modelRepo.findCountTradeDealAtMonthModel(modelName, month, year);
+		log.debug("model {} has {} tradeDeals in month {} of {}", res.getName(), res.getAmount(), month,
+				year);
 		return res.getAmount();
 	}
 
@@ -174,8 +176,10 @@ public class CarsServiceImpl implements CarsService {
 	 * range
 	 */
 	public List<ModelNameAmount> mostPopularModelNameByOwnerAges(int nModels, int ageFrom, int ageTo) {
-		// TODO Auto-generated method stub
-		return null;
+		List<ModelNameAmount> res = carRepo.findMostPopularModelNameByOwnerAges(nModels, ageFrom, ageTo);
+		res.forEach(mn -> log.debug("for age between {} and {} model name is {}, number of cars {} ", 
+				ageFrom, ageTo, mn.getName(), mn.getAmount()));
+		return res;
 	}
 
 	@Override

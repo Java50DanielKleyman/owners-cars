@@ -18,12 +18,15 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 @Query(value="select c.model_name as name, count(*) as amount "
 		+ "from cars c group by c.model_name order by count(*) desc limit :nModels", nativeQuery=true)
 List<ModelNameAmount> findMostPopularModelNames(int nModels);
-@Query(value="select c.model_name as name, count(*) as amount "
-		+ "from cars c join trade_deals td "
-		+ "on c.car_number = trade_deals.car_number "
-		+ "where extract(month from date) = :month and extract(year from date) = :year"
-		+  "and model_name = :modelName", nativeQuery=true)
-		
+@Query(value = "SELECT c.model_name AS name, COUNT(*) AS amount "
+        + "FROM cars c "
+        + "JOIN trade_deals td ON c.car_number = td.car_number "
+        + "WHERE EXTRACT(MONTH FROM td.date) = :month AND EXTRACT(YEAR FROM td.date) = :year "
+        + "AND c.model_name = :modelName", nativeQuery = true)	
 ModelNameAmount findCountTradeDealAtMonthModel(String modelName, int month, int year);
 boolean existsByModelYearName(String modelName);
+
+
+
+
 }
