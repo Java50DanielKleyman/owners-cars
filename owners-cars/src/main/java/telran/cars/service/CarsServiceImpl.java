@@ -1,11 +1,7 @@
 package telran.cars.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +12,6 @@ import telran.cars.dto.*;
 import telran.cars.exceptions.*;
 import telran.cars.repo.*;
 import telran.cars.service.model.*;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,11 +20,10 @@ public class CarsServiceImpl implements CarsService {
 	final CarOwnerRepo carOwnerRepo;
 	final ModelRepo modelRepo;
 	final TradeDealRepo tradeDealRepo;
-
 	@Override
 	@Transactional
 	public PersonDto addPerson(PersonDto personDto) {
-		if (carOwnerRepo.existsById(personDto.id())) {
+		if(carOwnerRepo.existsById(personDto.id())) {
 			throw new IllegalPersonsStateException();
 		}
 		CarOwner carOwner = CarOwner.of(personDto);
@@ -41,7 +35,7 @@ public class CarsServiceImpl implements CarsService {
 	@Override
 	@Transactional
 	public CarDto addCar(CarDto carDto) {
-		if (carRepo.existsById(carDto.number())) {
+		if(carRepo.existsById(carDto.number())) {
 			throw new IllegalCarsStateException();
 		}
 		Model model = modelRepo.findById(new ModelYear(carDto.model(), carDto.year()))
@@ -56,123 +50,152 @@ public class CarsServiceImpl implements CarsService {
 	@Override
 	@Transactional
 	public PersonDto updatePerson(PersonDto personDto) {
-		CarOwner carOwner = carOwnerRepo.findById(personDto.id()).orElseThrow(() -> new PersonNotFoundException());
+		CarOwner carOwner = carOwnerRepo.findById(personDto.id())
+				.orElseThrow(() -> new PersonNotFoundException());
 		carOwner.setEmail(personDto.email());
-		carOwnerRepo.save(carOwner);
-		return carOwner.build();
+		return personDto;
 	}
 
 	@Override
 	@Transactional
 	public PersonDto deletePerson(long id) {
-		CarOwner carOwner = carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException());
-		List<Car> cars = carRepo.findByCarOwnerId(id);
-		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarOwner_Id(id);
-		tradeDealRepo.deleteAll(tradeDeals);
-		if (!cars.isEmpty()) {
-			cars.forEach(car -> car.setCarOwner(null));
-		}
+		CarOwner carOwner = carOwnerRepo.findById(id)
+				.orElseThrow(()-> new PersonNotFoundException());
+		
 		carOwnerRepo.deleteById(id);
-		cars.forEach(car -> carRepo.save(car));
-		log.debug("Carowner {} has been deleted", carOwner);
-		// TODO
-		// HW #63
-		// find Car having being deleted owner
-		// If such car exists, set null as the car owner
-		// after that delete by the method deleteById from carOwnerRepo
 		return carOwner.build();
 	}
 
 	@Override
+	@Transactional
 	public CarDto deleteCar(String carNumber) {
-
-		if (!carRepo.existsById(carNumber)) {
-			throw new CarNotFoundException();
-		}
-		List<TradeDeal> tradeDeals = tradeDealRepo.findByCarNumber(carNumber);
-		tradeDealRepo.deleteAll(tradeDeals);
-		Car car = carRepo.findByNumber(carNumber);
+		Car car = carRepo.findById(carNumber).orElseThrow(() -> new CarNotFoundException());
+		
+		CarDto res = car.build();
 		carRepo.deleteById(carNumber);
-		log.debug("Car {} has been deleted", car);
-		// TODO
-		// HW #63
-		// find all TradeDeal entities for a given Car
-		// delete all such entities
-		// delete by the method deleteById from CarRepo
-		return car.build();
+		return res;
 	}
 
 	@Override
+	@Transactional
 	public TradeDealDto purchase(TradeDealDto tradeDealDto) {
-		Car car = carRepo.findById(tradeDealDto.carNumber()).orElseThrow(() -> new CarNotFoundException());
-		CarOwner carOwner = null;
+		Car car = carRepo.findById(tradeDealDto.carNumber())
+				.orElseThrow(() -> new CarNotFoundException());
+		CarOwner oldCarOwner = car.getCarOwner();
+		CarOwner newCarOwner = null;
 		Long personId = tradeDealDto.personId();
-		if (personId != null) {
-			carOwner = carOwnerRepo.findById(personId).orElseThrow(() -> new PersonNotFoundException());
-			if (car.getCarOwner().getId() == personId) {
+		if ( personId != null) {
+			log.debug("ID of new car's owner is {}", personId);
+			newCarOwner = carOwnerRepo.findById(personId)
+					.orElseThrow(() -> new PersonNotFoundException());
+			if(oldCarOwner != null && oldCarOwner.getId() == personId) {
 				throw new TradeDealIllegalStateException();
 			}
+		} else if (oldCarOwner == null) {
+			throw new TradeDealIllegalStateException();
 		}
 		TradeDeal tradeDeal = new TradeDeal();
 		tradeDeal.setCar(car);
-		tradeDeal.setCarOwner(carOwner);
+		tradeDeal.setCarOwner(newCarOwner);
 		tradeDeal.setDate(LocalDate.parse(tradeDealDto.date()));
-		car.setCarOwner(carOwner);
-		carRepo.save(car);
+		car.setCarOwner(newCarOwner);
 		tradeDealRepo.save(tradeDeal);
+		log.debug("trade: {} has been saved", tradeDealDto);
 		return tradeDealDto;
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public List<CarDto> getOwnerCars(long id) {
 		if (!carOwnerRepo.existsById(id)) {
 			throw new PersonNotFoundException();
 		}
 		List<Car> cars = carRepo.findByCarOwnerId(id);
-		List<CarDto> carsDto = new ArrayList<>();
-		cars.forEach(car -> carsDto.add(car.build()));
-		return carsDto;
+		if (cars.isEmpty()) {
+			log.warn("person with id {} has no cars", id);
+		} else {
+			log.debug("person with id {} has {} cars {}",id, cars.size());
+		}
+		return cars.stream().map(Car::build).toList();
 	}
 
 	@Override
+	@Transactional(readOnly=true)
 	public PersonDto getCarOwner(String carNumber) {
-		if (!carRepo.existsById(carNumber)) {
-			throw new CarNotFoundException();
+		Car car = carRepo.findById(carNumber)
+				.orElseThrow(() -> new CarNotFoundException());
+		CarOwner carOwner = car.getCarOwner();
+		return carOwner != null ? carOwner.build() : null;
+		
+	}
+
+	@Override
+	public List<String> mostSoldModelNames() {
+		List<String> res = modelRepo.findMostSoldModelNames();
+		log.trace("most sold model names are {}", res);
+		
+		return res;
+	}
+
+	@Override
+	@Transactional
+	public ModelDto addModel(ModelDto modelDto) {
+		ModelYear modelYear = new ModelYear(modelDto.getModelName(), modelDto.getModelYear());
+		if(modelRepo.existsById(modelYear)) {
+			throw new ModelIllegalStateException();
 		}
-		Car car = carRepo.findByNumber(carNumber);
-		if (car.getCarOwner() != null) {
-			Long id = car.getCarOwner().getId();
-			return carOwnerRepo.findById(id).orElseThrow(() -> new PersonNotFoundException()).build();
-		}
+		Model model = Model.of(modelDto);
+		modelRepo.save(model);
+		return modelDto;
+	}
+
+	@Override
+	public List<ModelNameAmount> mostPopularModelNames(int nModels) {
+		List<ModelNameAmount> res = modelRepo.findMostPopularModelNames(nModels);
+		res.forEach(mn -> log.debug("model name is {}, number of cars {}",
+				mn.getName(), mn.getAmount()));
+		return res;
+	}
+
+	@Override
+	/**
+	 * returns count of trade deals for a given 'modelName'
+	 * at a given year / month
+	 * Try to apply only interface method name without @Query annotation
+	 */
+	public long countTradeDealAtMonthModel(String modelName, int month, int year) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	/**
+	 * returns list of a given number of most popular (most cars amount)
+	 *  model names and appropriate amounts of the cars,
+	 * owners of which have an age in a given range
+	 */
+	public List<ModelNameAmount> mostPopularModelNameByOwnerAges(int nModels, int ageFrom, int ageTo) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<String> mostPopularModels() {
-		List<Car> cars = carRepo.findAll();
-		 Map<String, Long> modelOccurrences = cars.stream()
-		            .map(car -> car.getModel().getModelYear().getName())
-		            .collect(Collectors.groupingBy(modelName -> modelName, Collectors.counting()));
-		 List<String> mostPopularModels = modelOccurrences.entrySet().stream()
-		            .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
-		            .limit(2)
-		            .map(Map.Entry::getKey)
-		            .collect(Collectors.toList());
-
-		    return mostPopularModels; 
+	/**
+	 * returns one most popular color of a given model
+	 */
+	public String oneMostPopularColorModel(String model) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public ModelDto addModel(ModelDto modelDto) {
-		if (modelRepo.existsById(new ModelYear(modelDto.getModelName(), modelDto.getModelYear()))) {
-			throw new IllegalCarsStateException();
-		}
-		Model model = Model.of(modelDto);
-		modelRepo.save(model);
-		log.debug("Model {} has been saved", model);
+	/**
+	 * returns minimal values of engine power and capacity
+	 * of car owners having an age in a given range
+	 */
+	public EnginePowerCapacity minEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo) {
 		// TODO Auto-generated method stub
-		// HW #63 Write the method similar to the method addPerson
-		return modelDto;
+		return null;
 	}
 
 }

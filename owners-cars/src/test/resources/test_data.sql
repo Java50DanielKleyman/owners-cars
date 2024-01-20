@@ -15,7 +15,11 @@ insert into car_owners (id, name,  email, birth_date) values
 insert into cars (car_number, color, kilometers, car_state, model_name, model_year, owner_id) values 
 ('111-11-111', 'red', 1000, 'GOOD', 'model1', 2020, 123),
 ('222-11-111', 'silver', 10000, 'OLD', 'model1', 2020, 124),
-('333-11-111', 'white', 0, 'NEW', 'model4', 2023, 125);
+('333-11-111', 'white', 0, 'NEW', 'model4', 2023, 125),
+('666-11-111', 'silver', 10000, 'OLD', 'model1', 2020, 124),
+('777-11-111', 'white', 0, 'NEW', 'model4', 2023, 125),
+('999-11-111', 'white', 0, 'NEW', 'model3', 2021, 124);
+
 
 insert into trade_deals ( date, car_number, owner_id) values 
 ( '2023-03-10', '111-11-111', 123),
