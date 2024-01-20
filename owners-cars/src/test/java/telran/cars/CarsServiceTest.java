@@ -273,6 +273,10 @@ class CarsServiceTest {
 	void testMinEnginePowerCapacityByOwnerAges() {
 		EnginePowerCapacity enginePowerCapacity = carsService.minEnginePowerCapacityByOwnerAges(10, 100);
 		assertEquals(1300, enginePowerCapacity.getEngineCapacity());
+		assertEquals(84, enginePowerCapacity.getEnginePower());
+		enginePowerCapacity = carsService.minEnginePowerCapacityByOwnerAges(40, 100);
+		assertEquals(2500, enginePowerCapacity.getEngineCapacity());
+		assertEquals(160, enginePowerCapacity.getEnginePower());
 	}
 
 }

@@ -36,7 +36,7 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 			+ "order by count(color) desc limit 1", nativeQuery = true)
 	String findOneMostPopularColorModel(String modelName);
 
-	@Query(value = "select min(m.engine_power) as min_enginePower, min(m.engine_capacity) as min_engineCapacity " 
+	@Query(value = "select min(engine_power) as enginePower, min(engine_capacity) as engineCapacity " 
 	        + "from car_owners co "
 			+ "join cars c on c.owner_id = co.id "
 			+ "join models m on c.model_name = m.model_name and c.model_year = m.model_year "
