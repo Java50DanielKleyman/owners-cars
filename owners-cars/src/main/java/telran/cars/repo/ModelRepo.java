@@ -26,7 +26,12 @@ List<ModelNameAmount> findMostPopularModelNames(int nModels);
         + "AND c.model_name = :modelName", nativeQuery = true)	
 ModelNameAmount findCountTradeDealAtMonthModel(String modelName, int month, int year);
 boolean existsByModelYearName(String modelName);
-
+@Query(value="select color "
+		+ "from cars c "
+		+ "join models m on c.model_name=m.model_name and c.model_year=m.model_year "
+		+ "group by model_name, color "
+		+ "order by count(color) desc limit 1", nativeQuery=true)
+String findOneMostPopularColorModel(String modelName);
 
 
 

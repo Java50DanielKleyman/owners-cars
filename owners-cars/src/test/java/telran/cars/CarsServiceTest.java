@@ -259,7 +259,8 @@ class CarsServiceTest {
 
 	@Test
 	void testOneMostPopularColorModel() {
-		// TODO
+		String color = carsService.oneMostPopularColorModel(MODEL1);
+		assertEquals("silver" , color);
 	}
 
 	@Test

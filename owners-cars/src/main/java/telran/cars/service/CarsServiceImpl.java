@@ -164,8 +164,7 @@ public class CarsServiceImpl implements CarsService {
 			throw new ModelIllegalStateException();
 		}
 		ModelNameAmount res = modelRepo.findCountTradeDealAtMonthModel(modelName, month, year);
-		log.debug("model {} has {} tradeDeals in month {} of {}", res.getName(), res.getAmount(), month,
-				year);
+		log.debug("model {} has {} tradeDeals in month {} of {}", res.getName(), res.getAmount(), month, year);
 		return res.getAmount();
 	}
 
@@ -177,8 +176,8 @@ public class CarsServiceImpl implements CarsService {
 	 */
 	public List<ModelNameAmount> mostPopularModelNameByOwnerAges(int nModels, int ageFrom, int ageTo) {
 		List<ModelNameAmount> res = carRepo.findMostPopularModelNameByOwnerAges(nModels, ageFrom, ageTo);
-		res.forEach(mn -> log.debug("for age between {} and {} model name is {}, number of cars {} ", 
-				ageFrom, ageTo, mn.getName(), mn.getAmount()));
+		res.forEach(mn -> log.debug("for age between {} and {} model name is {}, number of cars {} ", ageFrom, ageTo,
+				mn.getName(), mn.getAmount()));
 		return res;
 	}
 
@@ -187,8 +186,11 @@ public class CarsServiceImpl implements CarsService {
 	 * returns one most popular color of a given model
 	 */
 	public String oneMostPopularColorModel(String model) {
-		// TODO Auto-generated method stub
-		return null;
+		if (!modelRepo.existsByModelYearName(model)) {
+			throw new ModelIllegalStateException();
+		}
+		String res = modelRepo.findOneMostPopularColorModel(model);
+		return res;
 	}
 
 	@Override
