@@ -160,9 +160,6 @@ public class CarsServiceImpl implements CarsService {
 	 */
 	public long countTradeDealAtMonthModel(String modelName, int month, int year) {
 
-		if (!modelRepo.existsByModelYearName(modelName)) {
-			throw new ModelIllegalStateException();
-		}
 		ModelNameAmount res = modelRepo.findCountTradeDealAtMonthModel(modelName, month, year);
 		log.debug("model {} has {} tradeDeals in month {} of {}", res.getName(), res.getAmount(), month, year);
 		return res.getAmount();
@@ -186,11 +183,9 @@ public class CarsServiceImpl implements CarsService {
 	 * returns one most popular color of a given model
 	 */
 	public String oneMostPopularColorModel(String model) {
-		if (!modelRepo.existsByModelYearName(model)) {
-			throw new ModelIllegalStateException();
-		}
+
 		String res = modelRepo.findOneMostPopularColorModel(model);
-		log.debug("most popular color of model {} is {}",model, res);
+		log.debug("most popular color of model {} is {}", model, res);
 		return res;
 	}
 
@@ -200,8 +195,10 @@ public class CarsServiceImpl implements CarsService {
 	 * age in a given range
 	 */
 	public EnginePowerCapacity minEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo) {
-		// TODO Auto-generated method stub
-		return null;
+		EnginePowerCapacity res = modelRepo.FindminEnginePowerCapacityByOwnerAges(ageFrom, ageTo);
+		log.debug("for owners having age from {} to {} min engine capacity is {}",ageFrom, ageTo, res.getEngineCapacity());
+		log.debug("for owners having age from {} to {} min engine power is {}",ageFrom, ageTo, res.getEnginePower());
+		return res;
 	}
 
 }

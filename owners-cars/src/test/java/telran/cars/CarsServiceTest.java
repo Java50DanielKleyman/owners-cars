@@ -271,7 +271,8 @@ class CarsServiceTest {
 
 	@Test
 	void testMinEnginePowerCapacityByOwnerAges() {
-		// TODO
+		EnginePowerCapacity enginePowerCapacity = carsService.minEnginePowerCapacityByOwnerAges(10, 100);
+		assertEquals(1300, enginePowerCapacity.getEngineCapacity());
 	}
 
 }

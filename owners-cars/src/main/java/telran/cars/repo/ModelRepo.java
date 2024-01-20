@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import telran.cars.dto.EnginePowerCapacity;
 import telran.cars.dto.ModelNameAmount;
 import telran.cars.service.model.*;
 
@@ -29,12 +30,17 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 
 	boolean existsByModelYearName(String modelName);
 
-	@Query(value = "select color " 
-	        + "FROM cars c "
+	@Query(value = "select color " + "FROM cars c "
 			+ "JOIN models m on c.model_name = m.model_name and c.model_year = m.model_year "
-	        + "where c.model_name= :modelName "
-			+ "group by color " 
+			+ "where c.model_name= :modelName " + "group by color "
 			+ "order by count(color) desc limit 1", nativeQuery = true)
 	String findOneMostPopularColorModel(String modelName);
+
+	@Query(value = "select min(m.engine_power) as min_enginePower, min(m.engine_capacity) as min_engineCapacity " 
+	        + "from car_owners co "
+			+ "join cars c on c.owner_id = co.id "
+			+ "join models m on c.model_name = m.model_name and c.model_year = m.model_year "
+			+ "where DATEDIFF('YEAR', co.birth_date, CURRENT_DATE()) between :ageFrom and :ageTo ", nativeQuery = true)
+	EnginePowerCapacity FindminEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo);
 
 }
