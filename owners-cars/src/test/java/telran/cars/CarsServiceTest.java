@@ -238,17 +238,20 @@ class CarsServiceTest {
 	@Test
 	void testMostPopularModelNameByOwnerAges() {
 		List<ModelNameAmount> modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 10, 100);
-//		assertEquals("model1", modelNameAmounts.get(0).getName());
-//		assertEquals(3, modelNameAmounts.get(0).getAmount());
-//		assertEquals("model4", modelNameAmounts.get(1).getName());
-//		assertEquals(2, modelNameAmounts.get(1).getAmount());
-//		assertEquals("model3", modelNameAmounts.get(2).getName());
-//		assertEquals(1, modelNameAmounts.get(2).getAmount());
-		modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 22, 100);
 		assertEquals("model1", modelNameAmounts.get(0).getName());
-//		assertEquals(3, modelNameAmounts.get(0).getAmount());
-//		assertEquals("model3", modelNameAmounts.get(1).getName());
-//		assertEquals(1, modelNameAmounts.get(1).getAmount());
+		assertEquals(3, modelNameAmounts.get(0).getAmount());
+		assertEquals("model4", modelNameAmounts.get(1).getName());
+		assertEquals(2, modelNameAmounts.get(1).getAmount());
+		assertEquals("model3", modelNameAmounts.get(2).getName());
+		assertEquals(1, modelNameAmounts.get(2).getAmount());
+		modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 10, 40);
+		assertEquals("model1", modelNameAmounts.get(0).getName());
+		assertEquals(3, modelNameAmounts.get(0).getAmount());
+		assertEquals("model3", modelNameAmounts.get(1).getName());
+		assertEquals(1, modelNameAmounts.get(1).getAmount());
+		modelNameAmounts = carsService.mostPopularModelNameByOwnerAges(3, 40, 100);
+		assertEquals("model4", modelNameAmounts.get(0).getName());
+		assertEquals(2, modelNameAmounts.get(0).getAmount());
 	}
 
 	@Test
