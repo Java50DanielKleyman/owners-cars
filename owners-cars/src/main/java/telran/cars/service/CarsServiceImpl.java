@@ -159,10 +159,11 @@ public class CarsServiceImpl implements CarsService {
 	 * Try to apply only interface method name without @Query annotation
 	 */
 	public long countTradeDealAtMonthModel(String modelName, int month, int year) {
-
-		ModelNameAmount res = modelRepo.findCountTradeDealAtMonthModel(modelName, month, year);
-		log.debug("model {} has {} tradeDeals in month {} of {}", res.getName(), res.getAmount(), month, year);
-		return res.getAmount();
+		LocalDate startDate = LocalDate.of(year, month, 1);
+		LocalDate endDate = startDate.plusMonths(1).minusDays(1);
+		long res = tradeDealRepo.countByCarModelModelYearNameAndDateBetween(modelName, startDate, endDate);
+		log.debug("model {} has {} tradeDeals in month {} of {}", modelName, res, month, year);
+		return res;
 	}
 
 	@Override
@@ -196,8 +197,9 @@ public class CarsServiceImpl implements CarsService {
 	 */
 	public EnginePowerCapacity minEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo) {
 		EnginePowerCapacity res = modelRepo.FindminEnginePowerCapacityByOwnerAges(ageFrom, ageTo);
-		log.debug("for owners having age from {} to {} min engine capacity is {}",ageFrom, ageTo, res.getEngineCapacity());
-		log.debug("for owners having age from {} to {} min engine power is {}",ageFrom, ageTo, res.getEnginePower());
+		log.debug("for owners having age from {} to {} min engine capacity is {}", ageFrom, ageTo,
+				res.getEngineCapacity());
+		log.debug("for owners having age from {} to {} min engine power is {}", ageFrom, ageTo, res.getEnginePower());
 		return res;
 	}
 

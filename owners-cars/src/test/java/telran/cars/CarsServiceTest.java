@@ -230,12 +230,12 @@ class CarsServiceTest {
 	// tests for the methods of the HW #64
 	@Test
 	void testCountTradeDealAtMonthModel() {
-		long modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL4, 4, 2023);
-		assertEquals(1, modelNameAmount1);
-		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);
-		assertEquals(3, modelNameAmount1);
-		modelNameAmount1 = carsService.countTradeDealAtMonthModel(MODEL1, 9, 2021);
-		assertEquals(0, modelNameAmount1);
+		long count1 = carsService.countTradeDealAtMonthModel(MODEL4, 4, 2023);
+		assertEquals(1, count1);
+		long count2 = carsService.countTradeDealAtMonthModel(MODEL1, 3, 2023);
+		assertEquals(3, count2);
+		long count3 = carsService.countTradeDealAtMonthModel(MODEL1, 9, 2021);
+		assertEquals(0, count3);
 	}
 
 	@Test

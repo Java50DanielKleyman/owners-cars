@@ -1,5 +1,6 @@
 package telran.cars.repo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,13 +21,6 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 	@Query(value = "select c.model_name as name, count(*) as amount "
 			+ "from cars c group by c.model_name order by count(*) desc limit :nModels", nativeQuery = true)
 	List<ModelNameAmount> findMostPopularModelNames(int nModels);
-
-	@Query(value = "SELECT c.model_name AS name, COUNT(*) AS amount " + "FROM cars c "
-			+ "JOIN trade_deals td ON c.car_number = td.car_number "
-			+ "JOIN models m on c.model_name = m.model_name and c.model_year = m.model_year "
-			+ "WHERE EXTRACT(MONTH FROM td.date) = :month AND EXTRACT(YEAR FROM td.date) = :year "
-			+ "AND c.model_name = :modelName", nativeQuery = true)
-	ModelNameAmount findCountTradeDealAtMonthModel(String modelName, int month, int year);
 
 	boolean existsByModelYearName(String modelName);
 
