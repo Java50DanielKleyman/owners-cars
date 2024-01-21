@@ -196,7 +196,7 @@ public class CarsServiceImpl implements CarsService {
 	 * age in a given range
 	 */
 	public EnginePowerCapacity minEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo) {
-		EnginePowerCapacity res = modelRepo.FindminEnginePowerCapacityByOwnerAges(ageFrom, ageTo);
+		EnginePowerCapacity res = modelRepo.findminEnginePowerCapacityByOwnerAges(ageFrom, ageTo);
 		log.debug("for owners having age from {} to {} min engine capacity is {}", ageFrom, ageTo,
 				res.getEngineCapacity());
 		log.debug("for owners having age from {} to {} min engine power is {}", ageFrom, ageTo, res.getEnginePower());

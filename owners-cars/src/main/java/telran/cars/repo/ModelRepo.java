@@ -30,11 +30,10 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 			+ "order by count(color) desc limit 1", nativeQuery = true)
 	String findOneMostPopularColorModel(String modelName);
 
-	@Query(value = "select min(engine_power) as enginePower, min(engine_capacity) as engineCapacity " 
-	        + "from car_owners co "
-			+ "join cars c on c.owner_id = co.id "
+	@Query(value = "select min(engine_power) as enginePower, min(engine_capacity) as engineCapacity "
+			+ "from car_owners co " + "join cars c on c.owner_id = co.id "
 			+ "join models m on c.model_name = m.model_name and c.model_year = m.model_year "
 			+ "where DATEDIFF('YEAR', co.birth_date, CURRENT_DATE()) between :ageFrom and :ageTo ", nativeQuery = true)
-	EnginePowerCapacity FindminEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo);
+	EnginePowerCapacity findminEnginePowerCapacityByOwnerAges(int ageFrom, int ageTo);
 
 }
