@@ -1,6 +1,6 @@
 package telran.cars.dto;
 
 public interface EnginePowerCapacity {
-	Integer getEnginePower();
-	Integer getEngineCapacity();
+int getPower();
+int getCapacity();
 }

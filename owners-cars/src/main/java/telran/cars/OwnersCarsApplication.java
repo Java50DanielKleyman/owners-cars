@@ -12,11 +12,11 @@ public class OwnersCarsApplication {
 		SpringApplication.run(OwnersCarsApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner runQueries(JPQLQueryConsole console) {
-		return args -> {
-			console.run(); // Run the console interactively
-		};
-	}
+//	@Bean
+//	public CommandLineRunner runQueries(JPQLQueryConsole console) {
+//		return args -> {
+//			console.run(); // Run the console interactively
+//		};
+//	}
 
 }

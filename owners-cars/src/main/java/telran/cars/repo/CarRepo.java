@@ -1,21 +1,24 @@
 package telran.cars.repo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import telran.cars.dto.ModelNameAmount;
+import telran.cars.dto.EnginePowerCapacity;
 import telran.cars.service.model.*;
 
 public interface CarRepo extends JpaRepository<Car, String> {
+List<Car> findByCarOwnerId(long id);
+/*********************************************************/
+@Query(value="select car.color from Car car where model.modelYear.name=:model group by color order"
+		+ " by count(*) desc, color asc  limit 1", nativeQuery=false)
+String findOneMostPopularColorModel(String model);
+/***********************************************************/
 
-Car findByNumber(String number);
-List<Car>findByCarOwnerId(long id);
-@Query(value = "select m.model_name as name, count(*) as amount "
-        + "from cars c join car_owners co on c.owner_id = co.id "
-        + "join models m on c.model_name = m.model_name and c.model_year = m.model_year "
-        + "where DATEDIFF('YEAR', co.birth_date, CURRENT_DATE()) between :ageFrom and :ageTo "
-        + "group by m.model_name order by count(*) desc limit :nModels", nativeQuery = true)
-List<ModelNameAmount> findMostPopularModelNameByOwnerAges(int nModels, int ageFrom, int ageTo);
+@Query("select min(car.model.enginePower) as power, min(car.model.engineCapacity) as capacity"
+		+ " from Car car where carOwner.birthDate between :birthDate1 and "
+		+ ":birthDate2 ")
+EnginePowerCapacity findMinPowerCapcityOwnerBirthDates(LocalDate birthDate1, LocalDate birthDate2);
 }
