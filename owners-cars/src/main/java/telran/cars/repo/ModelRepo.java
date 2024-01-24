@@ -3,6 +3,7 @@ package telran.cars.repo;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -26,11 +27,11 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 		+ "from Car c group by c.model.modelYear.name order by count(*) desc limit :nModels")
 List<ModelNameAmount> findMostPopularModelNames(int nModels);
 /*************************************************************************/
-@Query(value="select model_name as name, count(*) as amount "
-		+ "from (select * from car_owners where birth_date between :birthDate1 and :birthDate2)"
-		+ " owners_age"
-		+ " join cars where id=owner_id "
-		+ "group by model_name order by count(*) desc limit :nModels", nativeQuery=true)
+@Query("select car.model.modelYear.name as name, count(*) as amount "
+		+ "from CarOwner carOwner "
+		+ "join Car car on car.carOwner.id=carOwner.id "
+		+ "where carOwner.birthDate between :birthDate1 and :birthDate2 "
+		+ "group by car.model.modelYear.name order by count(*) desc limit :nModels")
 List<ModelNameAmount> findPopularModelNameOwnerAges(int nModels,
 		LocalDate birthDate1, LocalDate birthDate2);
 
