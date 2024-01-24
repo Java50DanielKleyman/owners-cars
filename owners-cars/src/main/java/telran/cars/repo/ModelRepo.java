@@ -10,12 +10,6 @@ import telran.cars.dto.ModelNameAmount;
 import telran.cars.service.model.*;
 
 public interface ModelRepo extends JpaRepository<Model, ModelYear> {
-//@Query(value="select model_name from cars join trade_deals td"
-//		+ " on cars.car_number=td.car_number group by model_name "
-//		+ " having count(*) = (select max(count) from "
-//		+ "(select count(*) as count from cars join trade_deals "
-//		+ " on cars.car_number = trade_deals.car_number "
-//		+ "group by model_name)) ", nativeQuery=true) //just SQL query
 @Query("select car.model.modelYear.name "
 		+ "from Car car "
 		+ "join TradeDeal tradeDeal on car.number = tradeDeal.car.number "
@@ -28,8 +22,8 @@ public interface ModelRepo extends JpaRepository<Model, ModelYear> {
 		+ "group by car1.model.modelYear.name))")
 	List<String> findMostSoldModelNames();
 /*************************************************************/
-@Query(value="select c.model_name as name, count(*) as amount "
-		+ "from cars c group by c.model_name order by count(*) desc limit :nModels", nativeQuery=true)
+@Query("select c.model.modelYear.name as name, count(*) as amount "
+		+ "from Car c group by c.model.modelYear.name order by count(*) desc limit :nModels")
 List<ModelNameAmount> findMostPopularModelNames(int nModels);
 /*************************************************************************/
 @Query(value="select model_name as name, count(*) as amount "
