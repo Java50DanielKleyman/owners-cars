@@ -12,8 +12,8 @@ import telran.cars.service.model.*;
 public interface CarRepo extends JpaRepository<Car, String> {
 List<Car> findByCarOwnerId(long id);
 /*********************************************************/
-@Query(value="select car.color from Car car where model.modelYear.name=:model group by color order"
-		+ " by count(*) desc, color asc  limit 1", nativeQuery=false)
+@Query("select color from Car where model.modelYear.name=:model group by color order"
+		+ " by count(*) desc  limit 1")
 String findOneMostPopularColorModel(String model);
 /***********************************************************/
 
